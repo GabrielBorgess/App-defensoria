@@ -1,0 +1,71 @@
+name: defensoria
+description: A new Flutter project.
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 0.0.1+1
+
+environment:
+  sdk: '>=2.19.4 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  url_launcher: ^6.1.12
+
+flutter_launcher_icons:
+  image_path_android: "assets/logoBonita.png"
+  image_path_ios: "assets/logoBonita.png"
+  android: "launcher_icon" # can specify file name here e.g. "ic_launcher"
+  ios: true # can specify file name here e.g. "My-Launcher-Icon"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  web:
+    generate: true
+    image_path: "assets/logoBonita.png"
+    background_color: "#ffffff"
+    theme_color: "#ffffff"
+  windows:
+    generate: true
+    image_path: "assets/logoBonita.png"
+    icon_size: 48 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path: "assets/logoBonita.png"
+  english_words: ^4.0.0
+  provider: ^6.0.0
+  webview_flutter: ^4.2.2
+  url_launcher: ^6.1.14
+  flutter_launcher_icons: ^0.13.1
+flutter_app_name:
+  name: "DefensoriaApp"
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_launcher_icons: ^0.11.0
+  flutter_app_name: ^0.1.0
+
+  flutter_lints: ^2.0.0
+
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/logoBonita.png
+    - assets/DPlogosemfundo.png
+    - assets/atendimento.png
+    - assets/documentosNecessarios.png
+    - assets/enderecoTelefone.png
+    - assets/defesaSaude.png
+    - assets/defesaMulher.png
+    - assets/segundograuTribunais.png
+    - assets/infanciaeJuventude.png
+    - assets/nucleoExecucaoPenais.png
+    - assets/medidasSocioeducativas.png
+    - assets/defesaIdoso.png
+    - assets/forumMirabete.png
+    - assets/direitosHumanos.png
+    - assets/custodiaPresos.png
+    - assets/nucleoMeditacao.png
+    - assets/consumidor.png
+    - assets/fazendaPublica.png
