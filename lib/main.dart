@@ -11,6 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Seu App',
       color: Color.fromARGB(236, 224, 224, 224), // Define a cor principal aqui
       home: HomePage(),
