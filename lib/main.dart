@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-
 void main() {
   runApp(MyApp());
 }
@@ -70,54 +69,7 @@ class HomePage extends StatelessWidget {
         child: Column(
           children: [
             HeaderHome(),
-            Container(
-              width: (MediaQuery.of(context).size.width),
-              height: (MediaQuery.of(context).size.height),
-              decoration: BoxDecoration(
-                color: Color.fromARGB(255, 42, 78, 58),
-                borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(32),
-                  topLeft: Radius.circular(32),
-                ),
-              ),
-              child: Padding(
-                  padding: const EdgeInsets.only(top: 16.0, bottom: 130),
-                  child: GridView.builder(
-                    physics: BouncingScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 22,
-                      crossAxisSpacing: 22,
-                    ),
-                    padding: EdgeInsets.all(18),
-                    itemCount: buttonsList.length,
-                    itemBuilder: (context, index) {
-                      return ElevatedButton(
-                        onPressed: () {
-                          launchUrl(
-                            Uri.parse(buttonsList[index].url),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromARGB(255, 0, 128, 55),
-                            textStyle: TextStyle(fontSize: 18.0),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20))),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              child: Image.asset(
-                                buttonsList[index].imagePath,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  )),
-            ),
+            Column(),
           ],
         ),
       ),
@@ -131,42 +83,12 @@ class HeaderHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(
-        left: 32.0,
-        right: 32.0,
-        top: 44.0,
-        bottom: 16.0,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          SizedBox(
-              height: 70,
-              width: MediaQuery.of(context).size.width * 0.2,
-              child: Image.asset('assets/logoBonita.png')),
-          SizedBox(
-            height: 50,
-            width: MediaQuery.of(context).size.width * 0.55,
-            child: Ink(
-              decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 42, 78, 58),
-                  borderRadius: BorderRadius.circular(5)),
-              child: InkWell(
-                onTap: () => {},
-                child: Center(
-                    child: Text(
-                  "ÁREA DO ASSISTIDO",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  ),
-                )),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+        padding: EdgeInsets.only(
+          top: 50.0,
+          bottom: 76.0,
+        ),
+        child: Image.asset('assets/logoBonita.png',
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height * 0.22));
   }
 }
