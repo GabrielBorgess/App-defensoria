@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 void main() {
   runApp(MyApp());
@@ -17,8 +16,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-// aaaa
 
 class CustomButton {
   final String imagePath;
@@ -71,7 +68,97 @@ class HomePage extends StatelessWidget {
         child: Column(
           children: [
             HeaderHome(),
-            Column(),
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 31,
+                right: 31,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          bottom: 16
+                        ),
+                        child: Text("Acesse sua conta",
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: MediaQuery.of(context).size.height * 0.02),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          bottom: 10
+                        ),
+                        child: TextFormField(
+                          decoration: const InputDecoration(
+                            enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black) ,borderRadius: BorderRadius.all(Radius.circular(8))),
+                            hintText: "CPF",
+                            hintStyle: TextStyle(color: Colors.black)
+                          ),
+                        ),
+                      ),
+                      TextFormField(
+                        decoration: const InputDecoration(
+                          enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
+                          hintText: "Senha",
+                          hintStyle: TextStyle(color: Colors.black)
+                        ),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 8
+                        ),
+                        child: Text("Esqueci minha senha",                
+                        style: TextStyle(decoration: TextDecoration.underline, fontSize: MediaQuery.of(context).size.height * 0.019),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 16,
+                          bottom: 8
+                        ),
+                        child: SizedBox(
+                          width: double.infinity,
+                          height: 46,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              // -------------- FUNÇÃO PARA LEVAR PARA OUTRA PÁGINA ---------
+                            },
+                            style: ElevatedButton.styleFrom(backgroundColor: Color.fromRGBO(33, 71, 22, 1),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))
+                            ),
+                            child: Text("Acessar"),                        
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 46,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            // -------------- FUNÇÃO PARA LEVAR PARA OUTRA PÁGINA ---------
+                          },
+                          style: ElevatedButton.styleFrom(backgroundColor: Colors.white, foregroundColor: Colors.black, textStyle: const TextStyle(fontWeight: FontWeight.bold),
+                          shape: RoundedRectangleBorder(side: BorderSide(color: Color.fromRGBO(33, 71, 22, 1)),borderRadius: BorderRadius.circular(8))
+                          ), 
+                          child: Text("Não tem uma conta ?"),                        
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -86,7 +173,7 @@ class HeaderHome extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
         padding: EdgeInsets.only(
-          top: 50.0,
+          top: 70.0,
           bottom: 76.0,
         ),
         child: Image.asset('assets/logoBonita.png',
