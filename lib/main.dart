@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'profile.dart';
 
 void main() {
   runApp(MyApp());
@@ -13,6 +14,9 @@ class MyApp extends StatelessWidget {
       title: 'Seu App',
       color: Color.fromARGB(236, 224, 224, 224), // Define a cor principal aqui
       home: HomePage(),
+      routes: {
+        '/home': (context) => ProfilePage(),
+      },
     );
   }
 }
@@ -99,25 +103,6 @@ class HomePage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
-                          hintText: "Senha",
-                          hintStyle: TextStyle(color: Colors.black)
-                        ),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 8
-                        ),
-                        child: Text("Esqueci minha senha",                
-                        style: TextStyle(decoration: TextDecoration.underline, fontSize: MediaQuery.of(context).size.height * 0.019),
-                        ),
-                      ),
                     ],
                   ),
                   Column(
@@ -132,7 +117,10 @@ class HomePage extends StatelessWidget {
                           height: 46,
                           child: ElevatedButton(
                             onPressed: () {
-                              // -------------- FUNÇÃO PARA LEVAR PARA OUTRA PÁGINA ---------
+                              Navigator.push(
+                                context, 
+                                MaterialPageRoute(builder: (context) => ProfilePage() )
+                              );
                             },
                             style: ElevatedButton.styleFrom(backgroundColor: Color.fromRGBO(33, 71, 22, 1),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))
