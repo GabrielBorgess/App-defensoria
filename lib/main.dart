@@ -71,7 +71,10 @@ class HomePage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            HeaderHome(),
+            Padding(
+              padding: const EdgeInsets.only(top: 50, bottom: 114),
+              child: HeaderHome(),
+            ),
             Padding(
               padding: const EdgeInsets.only(
                 left: 31,
@@ -159,13 +162,8 @@ class HeaderHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: EdgeInsets.only(
-          top: 70.0,
-          bottom: 76.0,
-        ),
-        child: Image.asset('assets/logoBonita.png',
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height * 0.22));
+    return Image.asset('assets/logoBonita.png',
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height * 0.22);
   }
 }
