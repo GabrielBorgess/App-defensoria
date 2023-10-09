@@ -106,6 +106,18 @@ class HomePage extends StatelessWidget {
                           ),
                         ),
                       ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          bottom: 10
+                        ),
+                        child: TextFormField(
+                          decoration: const InputDecoration(
+                            enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black) ,borderRadius: BorderRadius.all(Radius.circular(8))),
+                            hintText: "Senha",
+                            hintStyle: TextStyle(color: Colors.black)
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                   Column(
@@ -142,7 +154,7 @@ class HomePage extends StatelessWidget {
                           style: ElevatedButton.styleFrom(backgroundColor: Colors.white, foregroundColor: Colors.black, textStyle: const TextStyle(fontWeight: FontWeight.bold),
                           shape: RoundedRectangleBorder(side: BorderSide(color: Color.fromRGBO(33, 71, 22, 1)),borderRadius: BorderRadius.circular(8))
                           ), 
-                          child: Text("Não tem uma conta ?"),                        
+                          child: Text("Esqueci minha senha"),                        
                         ),
                       ),
                     ],
