@@ -136,6 +136,22 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  http:
+    dependency: "direct main"
+    description:
+      name: http
+      sha256: "759d1a329847dd0f39226c688d3e06a6b8679668e350e2891a6474f8b4bb8525"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
+  http_parser:
+    dependency: transitive
+    description:
+      name: http_parser
+      sha256: "2aa08ce0341cc9b354a498388e30986515406668dbcc4f7c950c3e715496693b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.2"
   image:
     dependency: transitive
     description:
@@ -168,6 +184,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
+  logging:
+    dependency: transitive
+    description:
+      name: logging
+      sha256: "623a88c9594aa774443aa3eb2d41807a48486b5613e67599fb4c41c0ad47c340"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.0"
   matcher:
     dependency: transitive
     description:
@@ -192,6 +216,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.9.1"
+  mysql1:
+    dependency: "direct main"
+    description:
+      name: mysql1
+      sha256: "68aec7003d2abc85769bafa1777af3f4a390a90c31032b89636758ff8eb839e9"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.20.0"
   path:
     dependency: transitive
     description:
@@ -224,6 +256,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.7.3"
+  pool:
+    dependency: transitive
+    description:
+      name: pool
+      sha256: "20fe868b6314b322ea036ba325e6fc0711a22948856475e2c2b6306e8ab39c2a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.5.1"
   sky_engine:
     dependency: transitive
     description: flutter

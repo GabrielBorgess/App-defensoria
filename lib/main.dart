@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'profile.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'post.dart';
 
 void main() {
   runApp(MyApp());
@@ -64,7 +67,52 @@ List<CustomButton> buttonsList = [
   // Adicione mais objetos CustomButton conforme necessário
 ];
 
-class HomePage extends StatelessWidget {
+Future<Post> createPost(String cpf, String senha) async {
+  Map<String, dynamic> request = {
+    'cpf': cpf,
+    'senha': senha
+  };
+
+  print(request);
+
+  final uri = Uri.parse("http://172.88.1.117:3000/entrar");
+  print('Enviando solicitação POST para: $uri'); // Mensagem de depuração
+  final response = await http.post(uri, body: request);
+
+  if (response.statusCode == 200) {
+    print('Resposta da API: ${response.statusCode} ${response.reasonPhrase}'); // Mensagem de depuração
+    print('Corpo da resposta: ${response.body}'); // Mensagem de depuração
+    return Post.fromJson(json.decode(response.body));
+
+  } else {
+    print('Erro na solicitação POST: ${response.statusCode} ${response.body}'); // Mensagem de depuração
+    throw Exception('Failed to load post');
+  }
+
+}
+
+class HomePage extends StatefulWidget {
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  Future<Post?>? post;
+
+  void clickPostButton() {
+  final String cpf = _cpfController.text.trim();
+  final String senha = _senhaController.text.trim();
+
+  // Agora você pode usar 'cpf' e 'senha' como desejar, por exemplo, passando para a função createPost
+  setState(() {
+    post = createPost(cpf, senha);
+  });
+  }
+
+  final TextEditingController _cpfController = TextEditingController();
+  final TextEditingController _senhaController = TextEditingController();
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,6 +147,7 @@ class HomePage extends StatelessWidget {
                           bottom: 10
                         ),
                         child: TextFormField(
+                          controller: _cpfController,
                           decoration: const InputDecoration(
                             enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black) ,borderRadius: BorderRadius.all(Radius.circular(8))),
                             hintText: "CPF",
@@ -111,6 +160,7 @@ class HomePage extends StatelessWidget {
                           bottom: 10
                         ),
                         child: TextFormField(
+                          controller: _senhaController,
                           decoration: const InputDecoration(
                             enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black) ,borderRadius: BorderRadius.all(Radius.circular(8))),
                             hintText: "Senha",
@@ -131,12 +181,8 @@ class HomePage extends StatelessWidget {
                           width: double.infinity,
                           height: 46,
                           child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context, 
-                                MaterialPageRoute(builder: (context) => ProfilePage() )
-                              );
-                            },
+                            onPressed: () => clickPostButton(),
+                            
                             style: ElevatedButton.styleFrom(backgroundColor: Color.fromRGBO(33, 71, 22, 1),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))
                             ),
@@ -179,3 +225,4 @@ class HeaderHome extends StatelessWidget {
         height: MediaQuery.of(context).size.height * 0.22);
   }
 }
+
