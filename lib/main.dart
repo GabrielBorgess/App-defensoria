@@ -3,6 +3,7 @@ import 'profile.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'post.dart';
+import 'error_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -19,6 +20,7 @@ class MyApp extends StatelessWidget {
       home: HomePage(),
       routes: {
         '/home': (context) => ProfilePage(),
+        '/profile': (context) => ErrorScreen() 
       },
     );
   }
@@ -67,10 +69,10 @@ List<CustomButton> buttonsList = [
   // Adicione mais objetos CustomButton conforme necessário
 ];
 
-Future<String> createPost(String cpf, String senha) async {
+Future<String> createPost(context, String cpf, String senha) async {
   Map<String, dynamic> request = {'cpf': cpf, 'senha': senha};
 
-  final uri = Uri.parse("http://172.88.0.145:3000/entrar");
+  final uri = Uri.parse("http://172.88.1.117:3000/entrar");
   final response = await http.post(uri, body: request);
 
   if (response.statusCode == 200) {
@@ -81,7 +83,7 @@ Future<String> createPost(String cpf, String senha) async {
 
 
       print('Token obtido: $token');
-
+      Navigator.pushReplacementNamed(context, '/home');
       return token;
     } else {
       throw Exception('Token not found in response');
@@ -98,6 +100,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  
   Future<Post?>? post;
 
   void clickPostButton() {
@@ -106,7 +109,7 @@ class _HomePageState extends State<HomePage> {
 
     // Agora você pode usar 'cpf' e 'senha' como desejar, por exemplo, passando para a função createPost
     setState(() {
-      post = createPost(cpf, senha) as Future<Post?>?;
+      post = createPost(context, cpf, senha) as Future<Post?>?;
     });
   }
 
@@ -115,6 +118,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -160,6 +164,7 @@ class _HomePageState extends State<HomePage> {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 10),
                         child: TextFormField(
+                          obscureText: true,
                           controller: _senhaController,
                           decoration: const InputDecoration(
                               enabledBorder: OutlineInputBorder(
@@ -193,9 +198,7 @@ class _HomePageState extends State<HomePage> {
                         width: double.infinity,
                         height: 46,
                         child: ElevatedButton(
-                          onPressed: () {
-                            // -------------- FUNÇÃO PARA LEVAR PARA OUTRA PÁGINA ---------
-                          },
+                          onPressed: () => ErrorScreen(),
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white,
                               foregroundColor: Colors.black,
