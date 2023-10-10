@@ -4,8 +4,13 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'post.dart';
 import 'error_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'ciclo_de_vida.dart';
+
+
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
 
@@ -13,6 +18,8 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final appLifecycleManager = AppLifecycleManager(context);
+    WidgetsBinding.instance?.addObserver(appLifecycleManager);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Seu App',
@@ -69,10 +76,10 @@ List<CustomButton> buttonsList = [
   // Adicione mais objetos CustomButton conforme necessário
 ];
 
-Future<String> createPost(context, String cpf, String senha) async {
+Future<void> createPost(context, String cpf, String senha) async {
   Map<String, dynamic> request = {'cpf': cpf, 'senha': senha};
 
-  final uri = Uri.parse("http://172.88.1.117:3000/entrar");
+  final uri = Uri.parse("http://172.88.0.224:3000/entrar");
   final response = await http.post(uri, body: request);
 
   if (response.statusCode == 200) {
@@ -80,11 +87,14 @@ Future<String> createPost(context, String cpf, String senha) async {
     if (responseBody.containsKey('token')) {
       String token = responseBody['token'];
 
-
-
       print('Token obtido: $token');
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('auth_token', token);
+      prefs.setInt('login_timestamp', DateTime.now().millisecondsSinceEpoch);
+
       Navigator.pushReplacementNamed(context, '/home');
-      return token;
+
     } else {
       throw Exception('Token not found in response');
     }
@@ -95,13 +105,23 @@ Future<String> createPost(context, String cpf, String senha) async {
 }
 
 class HomePage extends StatefulWidget {
+  
+  const HomePage({super.key});
+  
   @override
+  
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   
   Future<Post?>? post;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkAuthAndNavigate(); // Chame a função na inicialização da tela
+  }
 
   void clickPostButton() {
     final String cpf = _cpfController.text.trim();
@@ -111,6 +131,26 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       post = createPost(context, cpf, senha) as Future<Post?>?;
     });
+  }
+
+  void _checkAuthAndNavigate() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final authToken = prefs.getString('auth_token');
+    final loginTimestamp = prefs.getInt('login_timestamp');
+
+    if (authToken != null && loginTimestamp != null) {
+      final currentTime = DateTime.now().millisecondsSinceEpoch;
+      final elapsedSeconds = (currentTime - loginTimestamp) ~/ 1000;
+    if (elapsedSeconds > 60) {
+      // O usuário ainda está autenticado, então vá para a página de perfil
+      prefs.remove('auth_token');
+      Navigator.pushReplacementNamed(context, '/home');
+    } else {
+      // O tempo de inatividade expirou, faça logout automaticamente
+      prefs.remove('auth_token');
+      Navigator.pushReplacementNamed(context, '/login'); // Redirecione para a tela de login
+      }
+    }
   }
 
   final TextEditingController _cpfController = TextEditingController();
@@ -198,7 +238,7 @@ class _HomePageState extends State<HomePage> {
                         width: double.infinity,
                         height: 46,
                         child: ElevatedButton(
-                          onPressed: () => ErrorScreen(),
+                          onPressed: () => {},
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white,
                               foregroundColor: Colors.black,

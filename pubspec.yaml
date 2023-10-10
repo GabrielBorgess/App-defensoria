@@ -11,8 +11,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  get: ^4.6.6
   http: ^1.1.0
   mysql1: ^0.20.0
+  shared_preferences: ^2.2.1
   url_launcher: ^6.1.12
 
 flutter_launcher_icons:
