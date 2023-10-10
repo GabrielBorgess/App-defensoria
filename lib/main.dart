@@ -67,28 +67,29 @@ List<CustomButton> buttonsList = [
   // Adicione mais objetos CustomButton conforme necessário
 ];
 
-Future<Post> createPost(String cpf, String senha) async {
-  Map<String, dynamic> request = {
-    'cpf': cpf,
-    'senha': senha
-  };
+Future<String> createPost(String cpf, String senha) async {
+  Map<String, dynamic> request = {'cpf': cpf, 'senha': senha};
 
-  print(request);
-
-  final uri = Uri.parse("http://172.88.1.117:3000/entrar");
-  print('Enviando solicitação POST para: $uri'); // Mensagem de depuração
+  final uri = Uri.parse("http://172.88.0.145:3000/entrar");
   final response = await http.post(uri, body: request);
 
   if (response.statusCode == 200) {
-    print('Resposta da API: ${response.statusCode} ${response.reasonPhrase}'); // Mensagem de depuração
-    print('Corpo da resposta: ${response.body}'); // Mensagem de depuração
-    return Post.fromJson(json.decode(response.body));
+    final Map<String, dynamic> responseBody = json.decode(response.body);
+    if (responseBody.containsKey('token')) {
+      String token = responseBody['token'];
 
+
+
+      print('Token obtido: $token');
+
+      return token;
+    } else {
+      throw Exception('Token not found in response');
+    }
   } else {
-    print('Erro na solicitação POST: ${response.statusCode} ${response.body}'); // Mensagem de depuração
+    print('Erro na solicitação POST: ${response.statusCode} ${response.body}');
     throw Exception('Failed to load post');
   }
-
 }
 
 class HomePage extends StatefulWidget {
@@ -100,18 +101,17 @@ class _HomePageState extends State<HomePage> {
   Future<Post?>? post;
 
   void clickPostButton() {
-  final String cpf = _cpfController.text.trim();
-  final String senha = _senhaController.text.trim();
+    final String cpf = _cpfController.text.trim();
+    final String senha = _senhaController.text.trim();
 
-  // Agora você pode usar 'cpf' e 'senha' como desejar, por exemplo, passando para a função createPost
-  setState(() {
-    post = createPost(cpf, senha);
-  });
+    // Agora você pode usar 'cpf' e 'senha' como desejar, por exemplo, passando para a função createPost
+    setState(() {
+      post = createPost(cpf, senha) as Future<Post?>?;
+    });
   }
 
   final TextEditingController _cpfController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
-
 
   @override
   Widget build(BuildContext context) {
@@ -135,37 +135,39 @@ class _HomePageState extends State<HomePage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(
-                          bottom: 16
-                        ),
-                        child: Text("Acesse sua conta",
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: MediaQuery.of(context).size.height * 0.02),
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: Text(
+                          "Acesse sua conta",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize:
+                                  MediaQuery.of(context).size.height * 0.02),
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(
-                          bottom: 10
-                        ),
+                        padding: const EdgeInsets.only(bottom: 10),
                         child: TextFormField(
                           controller: _cpfController,
                           decoration: const InputDecoration(
-                            enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black) ,borderRadius: BorderRadius.all(Radius.circular(8))),
-                            hintText: "CPF",
-                            hintStyle: TextStyle(color: Colors.black)
-                          ),
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.black),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(8))),
+                              hintText: "CPF",
+                              hintStyle: TextStyle(color: Colors.black)),
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(
-                          bottom: 10
-                        ),
+                        padding: const EdgeInsets.only(bottom: 10),
                         child: TextFormField(
                           controller: _senhaController,
                           decoration: const InputDecoration(
-                            enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black) ,borderRadius: BorderRadius.all(Radius.circular(8))),
-                            hintText: "Senha",
-                            hintStyle: TextStyle(color: Colors.black)
-                          ),
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.black),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(8))),
+                              hintText: "Senha",
+                              hintStyle: TextStyle(color: Colors.black)),
                         ),
                       ),
                     ],
@@ -173,20 +175,17 @@ class _HomePageState extends State<HomePage> {
                   Column(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(
-                          top: 16,
-                          bottom: 8
-                        ),
+                        padding: const EdgeInsets.only(top: 16, bottom: 8),
                         child: SizedBox(
                           width: double.infinity,
                           height: 46,
                           child: ElevatedButton(
                             onPressed: () => clickPostButton(),
-                            
-                            style: ElevatedButton.styleFrom(backgroundColor: Color.fromRGBO(33, 71, 22, 1),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))
-                            ),
-                            child: Text("Acessar"),                        
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Color.fromRGBO(33, 71, 22, 1),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8))),
+                            child: Text("Acessar"),
                           ),
                         ),
                       ),
@@ -197,10 +196,16 @@ class _HomePageState extends State<HomePage> {
                           onPressed: () {
                             // -------------- FUNÇÃO PARA LEVAR PARA OUTRA PÁGINA ---------
                           },
-                          style: ElevatedButton.styleFrom(backgroundColor: Colors.white, foregroundColor: Colors.black, textStyle: const TextStyle(fontWeight: FontWeight.bold),
-                          shape: RoundedRectangleBorder(side: BorderSide(color: Color.fromRGBO(33, 71, 22, 1)),borderRadius: BorderRadius.circular(8))
-                          ), 
-                          child: Text("Esqueci minha senha"),                        
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              foregroundColor: Colors.black,
+                              textStyle:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                              shape: RoundedRectangleBorder(
+                                  side: BorderSide(
+                                      color: Color.fromRGBO(33, 71, 22, 1)),
+                                  borderRadius: BorderRadius.circular(8))),
+                          child: Text("Esqueci minha senha"),
                         ),
                       ),
                     ],
@@ -225,4 +230,3 @@ class HeaderHome extends StatelessWidget {
         height: MediaQuery.of(context).size.height * 0.22);
   }
 }
-
