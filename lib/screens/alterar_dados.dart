@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-
-
 class AlterarDados extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

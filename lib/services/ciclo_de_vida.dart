@@ -24,7 +24,8 @@ class AppLifecycleManager extends WidgetsBindingObserver {
       if (elapsedMinutes > 5) {
         // O tempo de inatividade expirou, faça logout automaticamente
         prefs.remove('auth_token');
-        Navigator.pushReplacementNamed(context, '/login'); // Redirecione para a tela de login
+        Navigator.pushReplacementNamed(
+            context, '/login'); // Redirecione para a tela de login
       }
     }
   }
