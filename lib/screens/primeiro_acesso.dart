@@ -1,31 +1,14 @@
-import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../widgets/header_home.dart';
-import '../services/post.dart';
+import 'package:flutter/material.dart';
 import '../services/create_post.dart';
 import 'package:provider/provider.dart';
 import '../services/auth_state.dart';
 
-class HomePage extends StatelessWidget {
-
-void clickPostButton(BuildContext context) {
-  final String cpf = _cpfController.text.trim();
-  final String senha = _senhaController.text.trim();
-
-  // Inicie a operação assíncrona para obter o token
-  createPost(context, cpf, senha).then((authToken) {
-    context.read<AuthState>().setAuthToken(authToken);
-  });
-}
-
-//   void _checkAuthAndNavigate() async {
-  final TextEditingController _cpfController = TextEditingController();
-
-  final TextEditingController _senhaController = TextEditingController();
+class FirstAccess extends StatelessWidget {
+  const FirstAccess({super.key});
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -48,7 +31,7 @@ void clickPostButton(BuildContext context) {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 16),
                         child: Text(
-                          "Acesse sua conta",
+                          "Configure sua senha",
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize:
@@ -58,27 +41,27 @@ void clickPostButton(BuildContext context) {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 10),
                         child: TextFormField(
-                          controller: _cpfController,
+                          controller: _novaSenhaController,
                           decoration: const InputDecoration(
                               enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.black),
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(8))),
-                              hintText: "CPF",
+                              hintText: "Nova senha",
                               hintStyle: TextStyle(color: Colors.black)),
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 10),
                         child: TextFormField(
+                          controller: _novaSenhaAgainController,
                           obscureText: true,
-                          controller: _senhaController,
                           decoration: const InputDecoration(
                               enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.black),
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(8))),
-                              hintText: "Senha",
+                              hintText: "Repita a senha",
                               hintStyle: TextStyle(color: Colors.black)),
                         ),
                       ),
@@ -101,23 +84,6 @@ void clickPostButton(BuildContext context) {
                           ),
                         ),
                       ),
-                      SizedBox(
-                        width: double.infinity,
-                        height: 46,
-                        child: ElevatedButton(
-                          onPressed: () => {},
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              foregroundColor: Colors.black,
-                              textStyle:
-                                  const TextStyle(fontWeight: FontWeight.bold),
-                              shape: RoundedRectangleBorder(
-                                  side: BorderSide(
-                                      color: Color.fromRGBO(33, 71, 22, 1)),
-                                  borderRadius: BorderRadius.circular(8))),
-                          child: Text("Esqueci minha senha"),
-                        ),
-                      ),
                     ],
                   ),
                 ],
@@ -129,3 +95,21 @@ void clickPostButton(BuildContext context) {
     );
   }
 }
+
+  void clickPostButton(BuildContext context) {
+    final String senha1 = _novaSenhaController.text.trim();
+    final String senha2 = _novaSenhaAgainController.text.trim();
+
+
+    final authToken = context.read<AuthState>().authToken;
+
+    // _checkAuthAndNavigate();
+
+    // Agora você pode usar 'cpf' e 'senha' como desejar, por exemplo, passando para a função createPost
+    createPostSenha(senha1, authToken);
+  }
+
+  final TextEditingController _novaSenhaController = TextEditingController();
+  final TextEditingController _novaSenhaAgainController = TextEditingController();
+
+
