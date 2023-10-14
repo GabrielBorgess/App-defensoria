@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'alterar_dados.dart';
+import 'change_data.dart';
 import '../widgets/header_home.dart';
 
 class ProfilePage extends StatelessWidget {

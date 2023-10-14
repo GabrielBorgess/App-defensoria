@@ -1,6 +1,6 @@
 import '../widgets/header_home.dart';
 import 'package:flutter/material.dart';
-import '../services/create_post.dart';
+import '../services/login.dart';
 import 'package:provider/provider.dart';
 import '../services/auth_state.dart';
 
@@ -103,11 +103,7 @@ void clickPostButton(BuildContext context) {
   final authToken = context.read<AuthState>().authToken;
 
   // _checkAuthAndNavigate();
-
-  // Agora você pode usar 'cpf' e 'senha' como desejar, por exemplo, passando para a função createPost
-  print('senha digitada: $senha1');
-  print('token de verificação: $authToken');
-  createPostSenha(context, senha1, authToken);
+  resetFirstLoginPass(context, senha1, authToken);
 }
 
 final TextEditingController _novaSenhaController = TextEditingController();

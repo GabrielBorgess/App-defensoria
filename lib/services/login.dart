@@ -3,7 +3,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future<String> createPost(context, String cpf, String senha) async {
+// -- Login
+
+Future<String> login(context, String cpf, String senha) async {
   Map<String, dynamic> request = {'cpf': cpf, 'senha': senha};
 
   final uri = Uri.parse("http://192.168.0.98:3000/entrar");
@@ -44,7 +46,11 @@ Future<String> createPost(context, String cpf, String senha) async {
   }
 }
 
-Future<void> createPostSenha(context, String senha, String token) async {
+// -- Fim Login
+
+//-- Definir senha nova para primeiro acesso
+
+Future<void> resetFirstLoginPass(context, String senha, String token) async {
   // URL para a qual você deseja enviar a solicitação POST
   String url = 'http://192.168.0.98:3000/reset';
   print('senha digitada ja na função: $senha');
@@ -76,9 +82,4 @@ Future<void> createPostSenha(context, String senha, String token) async {
   }
 }
 
-// Para chamar a função fazerPostRequest, você pode fazer isso em resposta a um evento, como um botão pressionado pelo usuário.
-
-
-
-
-
+// --

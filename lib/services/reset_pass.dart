@@ -45,7 +45,7 @@ Future<void> resetPassAuth(
     print('Solicitação POST bem-sucedida');
     print('Resposta: ${response.body}');
 
-    //Navigator.pushReplacementNamed(context, '/resetpass_auth');
+    Navigator.pushReplacementNamed(context, '/home');
   } else {
     print('Falha na solicitação POST');
     print('Código de status: ${response.statusCode}');

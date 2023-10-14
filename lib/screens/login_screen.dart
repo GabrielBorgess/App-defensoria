@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
-//import 'package:shared_preferences/shared_preferences.dart';
 import '../widgets/header_home.dart';
-//import '../services/post.dart';
-import '../services/create_post.dart';
+import '../services/login.dart';
 import 'package:provider/provider.dart';
 import '../services/auth_state.dart';
 
-class HomePage extends StatelessWidget {
+class LoginScreen extends StatelessWidget {
   void clickPostButton(BuildContext context) {
     final String cpf = _cpfController.text.trim();
     final String senha = _senhaController.text.trim();
 
     // Inicie a operação assíncrona para obter o token
-    createPost(context, cpf, senha).then((authToken) {
+    login(context, cpf, senha).then((authToken) {
       context.read<AuthState>().setAuthToken(authToken);
     });
   }
