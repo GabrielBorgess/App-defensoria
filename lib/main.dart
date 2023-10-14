@@ -3,6 +3,7 @@ import 'screens/profile.dart';
 import 'screens/home_page.dart';
 import 'screens/error_screen.dart';
 import 'screens/primeiro_acesso.dart';
+import 'screens/reset_password_screen.dart';
 import 'package:provider/provider.dart';
 import '../services/auth_state.dart';
 
@@ -31,7 +32,9 @@ class MyApp extends StatelessWidget {
         '/profile': (context) => ProfilePage(),
         '/tela_de_erro': (context) => ErrorScreen(),
         '/primeiro_acesso': (context) => FirstAccess(),
-        '/home': (context) => HomePage()
+        '/home': (context) => HomePage(),
+        '/resetpass': (context) => ResetPassword(),
+        '/resetpass_auth': (context) => ResetPasswordAuth(),
       },
     );
   }

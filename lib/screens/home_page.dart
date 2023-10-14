@@ -104,7 +104,8 @@ class HomePage extends StatelessWidget {
                           width: double.infinity,
                           height: 46,
                           child: ElevatedButton(
-                            onPressed: () => {},
+                            onPressed: () => Navigator.pushReplacementNamed(
+                                context, '/resetpass'),
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.white,
                                 foregroundColor: Colors.black,

@@ -13,6 +13,11 @@ Future<String> createPost(context, String cpf, String senha) async {
     final Map<String, dynamic> responseBody = json.decode(response.body);
     print(responseBody);
     if (responseBody.containsKey('firstAccess') != true) {
+      String authToken = responseBody['token'];
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('auth_token', authToken);
+
       Navigator.pushReplacementNamed(context, '/profile');
     }
     if (responseBody.containsKey('firstAccess')) {
