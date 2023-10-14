@@ -96,20 +96,19 @@ class FirstAccess extends StatelessWidget {
   }
 }
 
-  void clickPostButton(BuildContext context) {
-    final String senha1 = _novaSenhaController.text.trim();
-    final String senha2 = _novaSenhaAgainController.text.trim();
+void clickPostButton(BuildContext context) {
+  final String senha1 = _novaSenhaController.text.trim();
+  //final String senha2 = _novaSenhaAgainController.text.trim();
 
+  final authToken = context.read<AuthState>().authToken;
 
-    final authToken = context.read<AuthState>().authToken;
+  // _checkAuthAndNavigate();
 
-    // _checkAuthAndNavigate();
+  // Agora você pode usar 'cpf' e 'senha' como desejar, por exemplo, passando para a função createPost
+  print('senha digitada: $senha1');
+  print('token de verificação: $authToken');
+  createPostSenha(context, senha1, authToken);
+}
 
-    // Agora você pode usar 'cpf' e 'senha' como desejar, por exemplo, passando para a função createPost
-    createPostSenha(senha1, authToken);
-  }
-
-  final TextEditingController _novaSenhaController = TextEditingController();
-  final TextEditingController _novaSenhaAgainController = TextEditingController();
-
-
+final TextEditingController _novaSenhaController = TextEditingController();
+final TextEditingController _novaSenhaAgainController = TextEditingController();
