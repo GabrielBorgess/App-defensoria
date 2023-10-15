@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'change_data.dart';
+import 'change_data_screen.dart';
 import '../widgets/header_home.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -88,7 +88,7 @@ class ProfilePage extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => AlterarDados()));
+                                  builder: (context) => ChangeDataScreen()));
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,

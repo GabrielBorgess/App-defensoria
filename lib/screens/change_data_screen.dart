@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../services/change_data.dart';
 
-class AlterarDados extends StatelessWidget {
+class ChangeDataScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,6 +36,7 @@ class AlterarDados extends StatelessWidget {
                         child: Text("Endereço"),
                       ),
                       TextFormField(
+                        controller: _adressController,
                         decoration: const InputDecoration(
                           enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.black),
@@ -134,6 +137,7 @@ class AlterarDados extends StatelessWidget {
                               child: Text("Número de celular 1"),
                             ),
                             TextFormField(
+                              controller: _phoneController,
                               decoration: const InputDecoration(
                                 enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.black),
@@ -167,7 +171,7 @@ class AlterarDados extends StatelessWidget {
                             width: double.infinity,
                             height: 46,
                             child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () => changeData(context),
                               style: ElevatedButton.styleFrom(
                                   backgroundColor:
                                       Color.fromRGBO(33, 71, 22, 1),
@@ -188,4 +192,17 @@ class AlterarDados extends StatelessWidget {
       ),
     );
   }
+}
+
+final TextEditingController _adressController = TextEditingController();
+final TextEditingController _phoneController = TextEditingController();
+
+void changeData(context) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  final authToken = prefs.getString('auth_token') ?? "";
+
+  final String newAdress = _adressController.text.trim();
+  final String newPhone = _phoneController.text.trim();
+
+  changeDataAuth(context, authToken, newAdress, newPhone);
 }
