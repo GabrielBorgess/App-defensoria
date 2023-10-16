@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> cpfSearchReset(context, String cpf) async {
-  String url = 'http://192.168.0.98:3000/recuperacao';
+  String url = 'http://172.88.0.224:3000/recuperacao';
 
   // Realiza a solicitação POST
   http.Response response = await http.post(Uri.parse(url), body: {"cpf": cpf});
@@ -29,8 +29,8 @@ Future<void> cpfSearchReset(context, String cpf) async {
 }
 
 Future<void> resetPassAuth(
-    context, String token, String smsCode, String newPass) async {
-  String url = 'http://192.168.0.98:3000/recuperacaoCod';
+    context, String token, String emailCode, String newPass) async {
+  String url = 'http://172.88.0.224:3000/recuperacaoCod';
 
   // Realiza a solicitação POST
   http.Response response = await http.post(
@@ -38,7 +38,7 @@ Future<void> resetPassAuth(
     headers: {
       'Authorization': 'Bearer $token',
     },
-    body: {"code": smsCode, "newPassword": newPass},
+    body: {"code": emailCode, "newPassword": newPass},
   );
 
   if (response.statusCode == 201) {

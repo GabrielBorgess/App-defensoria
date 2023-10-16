@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 Future<String> login(context, String cpf, String senha) async {
   Map<String, dynamic> request = {'cpf': cpf, 'senha': senha};
 
-  final uri = Uri.parse("http://192.168.0.98:3000/entrar");
+  final uri = Uri.parse("http://172.88.0.224:3000/entrar");
   final response = await http.post(uri, body: request);
 
   if (response.statusCode == 200) {
@@ -42,7 +42,7 @@ Future<String> login(context, String cpf, String senha) async {
     }
   } else {
     print('Erro na solicitação POST: ${response.statusCode} ${response.body}');
-    return ('Failed to load post');
+    return ('Informações incorretas.');
   }
 }
 
@@ -52,9 +52,10 @@ Future<String> login(context, String cpf, String senha) async {
 
 Future<void> resetFirstLoginPass(context, String senha, String token) async {
   // URL para a qual você deseja enviar a solicitação POST
-  String url = 'http://192.168.0.98:3000/reset';
+  String url = 'http://172.88.0.224:3000/reset';
   print('senha digitada ja na função: $senha');
   print('token de verificação ja na função: $token');
+  print(token);
 
   // Corpo da solicitação, você pode incluir a senha digitada pelo usuário aqui
   Map<String, String> body = {

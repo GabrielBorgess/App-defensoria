@@ -34,7 +34,7 @@ class ResetPassword extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 16),
                         child: Text(
-                          "Digite sua nova senha",
+                          "Digite seu CPF",
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize:
@@ -93,7 +93,7 @@ void cpfSearchForReset(BuildContext context) {
 //--- Fim da verificação do cpf
 
 //--- Validar codigo do SMS e trocar senha
-final TextEditingController _smsCodeController = TextEditingController();
+final TextEditingController _emailCodeController = TextEditingController();
 final TextEditingController _newPass1 = TextEditingController();
 final TextEditingController _newPass2 = TextEditingController();
 
@@ -124,7 +124,7 @@ class ResetPasswordAuth extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 16),
                         child: Text(
-                          "Digite o código recebido por SMS:",
+                          "Digite o código recebido no seu e-mail:",
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize:
@@ -134,7 +134,7 @@ class ResetPasswordAuth extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 10),
                         child: TextFormField(
-                          controller: _smsCodeController,
+                          controller: _emailCodeController,
                           decoration: const InputDecoration(
                               enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.black),
@@ -163,6 +163,7 @@ class ResetPasswordAuth extends StatelessWidget {
                         padding: const EdgeInsets.only(bottom: 10),
                         child: TextFormField(
                           controller: _newPass1,
+                          obscureText: true,
                           decoration: const InputDecoration(
                               enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.black),
@@ -176,6 +177,7 @@ class ResetPasswordAuth extends StatelessWidget {
                         padding: const EdgeInsets.only(bottom: 10),
                         child: TextFormField(
                           controller: _newPass2,
+                          obscureText: true,
                           decoration: const InputDecoration(
                               enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.black),
@@ -217,15 +219,16 @@ class ResetPasswordAuth extends StatelessWidget {
 }
 
 void forgotPass(context) async {
-  final String smsCode = _smsCodeController.text.trim();
+  final String emailCode = _emailCodeController.text.trim();
   final String newpass1 = _newPass1.text.trim();
+  final String newPass2 = _newPass2.text.trim();
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
   final resetToken = prefs.getString('reset_token') ?? "";
 
-  print('codigo digitado antes da função: $smsCode');
-  print('token digitado antes da função: $resetToken');
-  print('senha digitada antes da função: $newpass1');
-
-  resetPassAuth(context, resetToken, smsCode, newpass1);
+  if (newpass1 == newPass2) {
+    resetPassAuth(context, resetToken, emailCode, newpass1);
+  } else {
+    print("senhas não são iguais");
+  }
 }

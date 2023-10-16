@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 
 Future<void> changeDataAuth(
     context, String token, String newAdress, String newPhone) async {
-  String url = 'http://192.168.0.98:3000/assistido/alterarDados';
+  String url = 'http://172.88.0.224:3000/assistido/alterarDados';
 
   // Realiza a solicitação POST
   http.Response response = await http.post(

@@ -4,20 +4,35 @@ import '../services/login.dart';
 import 'package:provider/provider.dart';
 import '../services/auth_state.dart';
 
-class LoginScreen extends StatelessWidget {
-  void clickPostButton(BuildContext context) {
+class LoginScreen extends StatefulWidget {
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController _cpfController = TextEditingController();
+  final TextEditingController _senhaController = TextEditingController();
+  String _errorText = '';
+
+  void clickPostButton(BuildContext context) async { 
     final String cpf = _cpfController.text.trim();
     final String senha = _senhaController.text.trim();
 
-    // Inicie a operação assíncrona para obter o token
-    login(context, cpf, senha).then((authToken) {
+    final result = await login(context,cpf,senha);
+
+    if (cpf.isEmpty || senha.isEmpty) {
+      setState(() {
+        _errorText = 'CPF e senha são obrigatórios.';
+      });
+    } else {
+      setState(() {
+        _errorText = result;
+      });
+      login(context, cpf, senha).then((authToken) {
       context.read<AuthState>().setAuthToken(authToken);
     });
+    }  
   }
-
-//   void _checkAuthAndNavigate() async {
-  final TextEditingController _cpfController = TextEditingController();
-  final TextEditingController _senhaController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -55,13 +70,13 @@ class LoginScreen extends StatelessWidget {
                           padding: const EdgeInsets.only(bottom: 10),
                           child: TextFormField(
                             controller: _cpfController,
-                            decoration: const InputDecoration(
+                            decoration: InputDecoration(
                                 enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.black),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(8))),
+                                    borderSide: BorderSide(color: _errorText.isEmpty ? Colors.black : Colors.red
+                                      ),
+                                    borderRadius: BorderRadius.all(Radius.circular(8))),
                                 hintText: "CPF",
-                                hintStyle: TextStyle(color: Colors.black)),
+                                hintStyle: TextStyle(color: _errorText.isEmpty ? Colors.black : Colors.red)),
                           ),
                         ),
                         Padding(
@@ -69,15 +84,23 @@ class LoginScreen extends StatelessWidget {
                           child: TextFormField(
                             obscureText: true,
                             controller: _senhaController,
-                            decoration: const InputDecoration(
+                            decoration: InputDecoration(
                                 enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.black),
+                                    borderSide: BorderSide(color: _errorText.isEmpty ? Colors.black : Colors.red),
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(8))),
                                 hintText: "Senha",
-                                hintStyle: TextStyle(color: Colors.black)),
+                                hintStyle: TextStyle(color: _errorText.isEmpty ? Colors.black : Colors.red)),
                           ),
                         ),
+                        if (_errorText.isNotEmpty)
+                          Text(
+                            _errorText,
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 14,
+                            ),
+                          ),
                       ],
                     ),
                     Column(
@@ -128,3 +151,4 @@ class LoginScreen extends StatelessWidget {
     );
   }
 }
+

@@ -4,6 +4,9 @@ import '../services/login.dart';
 import 'package:provider/provider.dart';
 import '../services/auth_state.dart';
 
+final TextEditingController _novaSenhaController = TextEditingController();
+final TextEditingController _novaSenhaAgainController = TextEditingController();
+
 class FirstAccess extends StatelessWidget {
   const FirstAccess({super.key});
 
@@ -42,6 +45,7 @@ class FirstAccess extends StatelessWidget {
                         padding: const EdgeInsets.only(bottom: 10),
                         child: TextFormField(
                           controller: _novaSenhaController,
+                          obscureText: true,
                           decoration: const InputDecoration(
                               enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.black),
@@ -98,13 +102,15 @@ class FirstAccess extends StatelessWidget {
 
 void clickPostButton(BuildContext context) {
   final String senha1 = _novaSenhaController.text.trim();
-  //final String senha2 = _novaSenhaAgainController.text.trim();
+  final String senha2 = _novaSenhaAgainController.text.trim();
 
   final authToken = context.read<AuthState>().authToken;
-
+  print(authToken);
   // _checkAuthAndNavigate();
+  if (senha1 == senha2) {
   resetFirstLoginPass(context, senha1, authToken);
+  } else {
+    print("senha digitada não confere.");
+  }
 }
 
-final TextEditingController _novaSenhaController = TextEditingController();
-final TextEditingController _novaSenhaAgainController = TextEditingController();
