@@ -19,6 +19,8 @@ Future<void> changeDataAuth(
     print('Resposta: ${response.body}');
 
     Navigator.pushReplacementNamed(context, '/profile');
+  } else if(response.statusCode == 500) {
+    Navigator.pushReplacementNamed(context, '/error_screen');
   } else {
     print('Falha na solicitação POST');
     print('Código de status: ${response.statusCode}');

@@ -29,7 +29,9 @@ class ErrorScreen extends StatelessWidget {
                 width: double.infinity,
                 height: 46,
                 child: ElevatedButton(
-                  onPressed: () => {},
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Color.fromRGBO(33, 71, 22, 1),
                       shape: RoundedRectangleBorder(

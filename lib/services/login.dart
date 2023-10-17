@@ -75,7 +75,8 @@ Future<void> resetFirstLoginPass(context, String senha, String token) async {
   if (response.statusCode == 201) {
     print('Solicitação POST bem-sucedida');
     print('Resposta: ${response.body}');
-    Navigator.pushReplacementNamed(context, '/profile');
+  } else if(response.statusCode == 500) {
+    Navigator.pushReplacementNamed(context, '/error_screen');
   } else {
     print('Falha na solicitação POST');
     print('Código de status: ${response.statusCode}');

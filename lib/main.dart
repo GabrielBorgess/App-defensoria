@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
       home: LoginScreen(),
       routes: {
         '/profile': (context) => ProfilePage(),
-        '/tela_de_erro': (context) => ErrorScreen(),
+        '/error_screen': (context) => ErrorScreen(),
         '/primeiro_acesso': (context) => FirstAccess(),
         '/home': (context) => LoginScreen(),
         '/resetpass': (context) => ResetPassword(),

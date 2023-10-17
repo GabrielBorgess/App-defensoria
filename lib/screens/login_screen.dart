@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 import '../widgets/header_home.dart';
 import '../services/login.dart';
 import 'package:provider/provider.dart';
@@ -24,9 +25,21 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         _errorText = 'CPF e senha são obrigatórios.';
       });
+// Adicione este trecho para limpar a mensagem de erro após 3 segundos.
+      Future.delayed(Duration(seconds: 3), () {
+        setState(() {
+          _errorText = '';
+        });
+      });
     } else {
       setState(() {
         _errorText = result;
+      });
+// Adicione este trecho para limpar a mensagem de erro após 3 segundos.
+      Future.delayed(Duration(seconds: 3), () {
+        setState(() {
+          _errorText = '';
+        });
       });
       login(context, cpf, senha).then((authToken) {
       context.read<AuthState>().setAuthToken(authToken);
@@ -76,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       ),
                                     borderRadius: BorderRadius.all(Radius.circular(8))),
                                 hintText: "CPF",
-                                hintStyle: TextStyle(color: _errorText.isEmpty ? Colors.black : Colors.red)),
+                                hintStyle: TextStyle(color: Colors.black)),
                           ),
                         ),
                         Padding(
@@ -90,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(8))),
                                 hintText: "Senha",
-                                hintStyle: TextStyle(color: _errorText.isEmpty ? Colors.black : Colors.red)),
+                                hintStyle: TextStyle(color: Colors.black)),
                           ),
                         ),
                         if (_errorText.isNotEmpty)

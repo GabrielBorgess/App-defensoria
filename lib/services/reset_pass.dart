@@ -41,11 +41,11 @@ Future<void> resetPassAuth(
     body: {"code": emailCode, "newPassword": newPass},
   );
 
-  if (response.statusCode == 201) {
+if (response.statusCode == 201) {
     print('Solicitação POST bem-sucedida');
     print('Resposta: ${response.body}');
-
-    Navigator.pushReplacementNamed(context, '/home');
+  } else if(response.statusCode == 400) {
+    Navigator.pushReplacementNamed(context, '/error_screen');
   } else {
     print('Falha na solicitação POST');
     print('Código de status: ${response.statusCode}');

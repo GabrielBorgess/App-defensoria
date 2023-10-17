@@ -1,15 +1,45 @@
 import '../widgets/header_home.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
 import '../services/login.dart';
 import 'package:provider/provider.dart';
 import '../services/auth_state.dart';
 
-final TextEditingController _novaSenhaController = TextEditingController();
-final TextEditingController _novaSenhaAgainController = TextEditingController();
-
-class FirstAccess extends StatelessWidget {
+class FirstAccess extends StatefulWidget {
   const FirstAccess({super.key});
 
+  @override
+  State<FirstAccess> createState() => _FirstAccessState();
+}
+
+class _FirstAccessState extends State<FirstAccess> {
+  String _errorText = '';
+  final TextEditingController _novaSenhaController = TextEditingController();
+  final TextEditingController _novaSenhaAgainController = TextEditingController();
+  
+  void clickPostButton(BuildContext context) async {
+  final String senha1 = _novaSenhaController.text.trim();
+  final String senha2 = _novaSenhaAgainController.text.trim();
+
+  final authToken = context.read<AuthState>().authToken;
+
+  // _checkAuthAndNavigate();
+  if (senha1 == senha2) {
+  resetFirstLoginPass(context, senha1, authToken);
+  Navigator.pushReplacementNamed(context, '/profile');
+  } else {
+      setState(() {
+        _errorText = 'Senhas não conferem.';
+      });
+
+      // Adicione este trecho para limpar a mensagem de erro após 3 segundos.
+      Future.delayed(Duration(seconds: 3), () {
+        setState(() {
+          _errorText = '';
+        });
+      });
+  }
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,9 +76,11 @@ class FirstAccess extends StatelessWidget {
                         child: TextFormField(
                           controller: _novaSenhaController,
                           obscureText: true,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                               enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.black),
+                                  borderSide: BorderSide(
+                          color: _errorText.isNotEmpty ? Colors.red : Colors.black,
+                        ), 
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(8))),
                               hintText: "Nova senha",
@@ -60,15 +92,22 @@ class FirstAccess extends StatelessWidget {
                         child: TextFormField(
                           controller: _novaSenhaAgainController,
                           obscureText: true,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                               enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.black),
+                                  borderSide: BorderSide(
+                          color: _errorText.isNotEmpty ? Colors.red : Colors.black,
+                        ), 
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(8))),
                               hintText: "Repita a senha",
                               hintStyle: TextStyle(color: Colors.black)),
                         ),
                       ),
+                       if (_errorText.isNotEmpty)
+                        Text(
+                          _errorText,
+                          style: TextStyle(color: Colors.red),
+                        ),
                     ],
                   ),
                   Column(
@@ -90,27 +129,13 @@ class FirstAccess extends StatelessWidget {
                       ),
                     ],
                   ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
-}
-
-void clickPostButton(BuildContext context) {
-  final String senha1 = _novaSenhaController.text.trim();
-  final String senha2 = _novaSenhaAgainController.text.trim();
-
-  final authToken = context.read<AuthState>().authToken;
-  print(authToken);
-  // _checkAuthAndNavigate();
-  if (senha1 == senha2) {
-  resetFirstLoginPass(context, senha1, authToken);
-  } else {
-    print("senha digitada não confere.");
-  }
-}
 

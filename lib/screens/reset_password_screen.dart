@@ -1,5 +1,6 @@
 import '../widgets/header_home.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
 import '../services/reset_pass.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -97,9 +98,44 @@ final TextEditingController _emailCodeController = TextEditingController();
 final TextEditingController _newPass1 = TextEditingController();
 final TextEditingController _newPass2 = TextEditingController();
 
-class ResetPasswordAuth extends StatelessWidget {
+
+class ResetPasswordAuth extends StatefulWidget {
   const ResetPasswordAuth({super.key});
 
+  @override
+  State<ResetPasswordAuth> createState() => _ResetPasswordAuthState();
+}
+
+class _ResetPasswordAuthState extends State<ResetPasswordAuth> {
+  String _errorText = '';
+  bool passwordMismatch = false;
+
+void forgotPass(context) async {
+  final String emailCode = _emailCodeController.text.trim();
+  final String newpass1 = _newPass1.text.trim();
+  final String newPass2 = _newPass2.text.trim();
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  final resetToken = prefs.getString('reset_token') ?? "";
+
+  if (newpass1 == newPass2) {
+    resetPassAuth(context, resetToken, emailCode, newpass1);
+    Navigator.pushReplacementNamed(context, '/home');
+  } else {
+          setState(() {
+        _errorText = 'Senhas não conferem.';
+        passwordMismatch = true;
+      });
+
+      // Adicione este trecho para limpar a mensagem de erro após 3 segundos.
+      Future.delayed(Duration(seconds: 3), () {
+        setState(() {
+          _errorText = '';
+          passwordMismatch = false;
+        });
+      });
+  }
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -164,9 +200,11 @@ class ResetPasswordAuth extends StatelessWidget {
                         child: TextFormField(
                           controller: _newPass1,
                           obscureText: true,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                               enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.black),
+                                  borderSide: BorderSide(
+                          color: passwordMismatch ? Colors.red : Colors.black,
+                        ),  
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(8))),
                               hintText: "senha nova",
@@ -178,15 +216,25 @@ class ResetPasswordAuth extends StatelessWidget {
                         child: TextFormField(
                           controller: _newPass2,
                           obscureText: true,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                               enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.black),
+                                  borderSide: BorderSide(
+                          color: passwordMismatch ? Colors.red : Colors.black,
+                        ),  
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(8))),
                               hintText: "confirmar senha nova",
                               hintStyle: TextStyle(color: Colors.black)),
                         ),
                       ),
+                      if (_errorText.isNotEmpty)
+                          Text(
+                            _errorText,
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 14,
+                            ),
+                          ),
                     ],
                   ),
                   Column(
@@ -202,7 +250,7 @@ class ResetPasswordAuth extends StatelessWidget {
                                 backgroundColor: Color.fromRGBO(33, 71, 22, 1),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8))),
-                            child: Text("Acessar"),
+                            child: Text("Resetar sua senha."),
                           ),
                         ),
                       ),
@@ -218,17 +266,3 @@ class ResetPasswordAuth extends StatelessWidget {
   }
 }
 
-void forgotPass(context) async {
-  final String emailCode = _emailCodeController.text.trim();
-  final String newpass1 = _newPass1.text.trim();
-  final String newPass2 = _newPass2.text.trim();
-
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  final resetToken = prefs.getString('reset_token') ?? "";
-
-  if (newpass1 == newPass2) {
-    resetPassAuth(context, resetToken, emailCode, newpass1);
-  } else {
-    print("senhas não são iguais");
-  }
-}
