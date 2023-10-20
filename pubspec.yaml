@@ -11,6 +11,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_easyloading: ^3.0.5
+  flutter_spinkit: ^5.2.0
   get: ^4.6.6
   http: ^1.1.0
   mysql1: ^0.20.0
