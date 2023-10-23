@@ -3,50 +3,85 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
-// -- Login
-
 Future<String> login(context, String cpf, String senha) async {
-  Map<String, dynamic> request = {'cpf': cpf, 'senha': senha};
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            CircularProgressIndicator(), // Ícone de carregamento
+            SizedBox(height: 16),
+            Text("Realizando login..."), // Texto informativo
+          ],
+        ),
+      );
+    },
+  );
 
-  final uri = Uri.parse("http://172.88.0.224:3000/entrar");
-  final response = await http.post(uri, body: request);
+  try {
+    Map<String, dynamic> request = {'cpf': cpf, 'senha': senha};
 
-  if (response.statusCode == 200) {
-    final Map<String, dynamic> responseBody = json.decode(response.body);
-    print(responseBody);
-    if (responseBody.containsKey('firstAccess') != true) {
-      String authToken = responseBody['token'];
+    final uri = Uri.parse("http://172.88.0.224:3000/entrar");
+    final response = await http.post(uri, body: request);
 
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('auth_token', authToken);
+    Navigator.pop(context); // Fecha o diálogo de carregamento
 
-      Navigator.pushReplacementNamed(context, '/profile');
-    }
-    if (responseBody.containsKey('firstAccess')) {
-      String authToken = responseBody['token'];
-      bool firstAccess = responseBody['firstAccess'];
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseBody = json.decode(response.body);
+      print(responseBody);
+      if (responseBody.containsKey('firstAccess') != true) {
+        String authToken = responseBody['token'];
 
-      Navigator.pushReplacementNamed(context, '/primeiro_acesso');
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('auth_token', authToken);
 
-      print('Token obtido: $authToken');
-      print(firstAccess);
+        Navigator.pushReplacementNamed(context, '/profile');
+      }
+      if (responseBody.containsKey('firstAccess')) {
+        String authToken = responseBody['token'];
+        bool firstAccess = responseBody['firstAccess'];
 
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('auth_token', authToken);
+        Navigator.pushReplacementNamed(context, '/primeiro_acesso');
 
-      // context.read<AuthState>().setAuthToken(authToken);
+        print('Token obtido: $authToken');
+        print(firstAccess);
 
-      return authToken;
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('auth_token', authToken);
+
+        // context.read<AuthState>().setAuthToken(authToken);
+
+        return authToken;
+      } else {
+        return 'Informações incorretas.';
+      }
     } else {
-      return 'Token not found in response';
+      print('Erro na solicitação POST: ${response.statusCode} ${response.body}');
+      return ('Informações incorretas.');
     }
-  } else {
-    print('Erro na solicitação POST: ${response.statusCode} ${response.body}');
-    return ('Informações incorretas.');
+  } catch (e) {
+    print('Erro: $e');
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Text("Falha ao realizar login. Tente novamente mais tarde."),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+    return '';
   }
 }
-
-// -- Fim Login
 
 //-- Definir senha nova para primeiro acesso
 
@@ -83,5 +118,4 @@ Future<void> resetFirstLoginPass(context, String senha, String token) async {
     print('Resposta: ${response.body}');
   }
 }
-
 // --

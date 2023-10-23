@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:async';
@@ -17,6 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
   String _errorText = '';
 
   void clickPostButton(BuildContext context) async { 
+
     final String cpf = _cpfController.text.trim();
     final String senha = _senhaController.text.trim();
     final String cpfNovo = maskCpf(cpf);
@@ -52,130 +55,117 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(backgroundColor: Color.fromARGB(255, 255, 255, 255),
-      body: Container(
-            decoration: BoxDecoration(
-      gradient: LinearGradient(
-        begin: Alignment.bottomLeft,
-        end: Alignment.topRight,
-        colors: [
-          Color.fromRGBO(33, 71, 22, 1), // Cor no topo
-          Color.fromARGB(255, 255, 255, 255), // Cor no meio (transparente)
-        ],
-        stops: [0.0, 0.5], // Ajuste isso para controlar a posição do degradê
-      ),
-    ),
-        child: SingleChildScrollView(
-          child: Builder(builder: (context) {
-            return Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 50, bottom: 114),
-                  child: HeaderHome(),
+      body: SingleChildScrollView(
+        child: Builder(builder: (context) {
+          return Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 50, bottom: 114),
+                child: HeaderHome(),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 31,
+                  right: 31,
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    left: 31,
-                    right: 31,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 16),
-                            child: Text(
-                              "Acesse sua conta",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize:
-                                      MediaQuery.of(context).size.height * 0.02),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: Text(
+                            "Acesse sua conta",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize:
+                                    MediaQuery.of(context).size.height * 0.02),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: TextFormField(
+                          inputFormatters: [CPFMask()],
+                            controller: _cpfController,
+                            decoration: InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: _errorText.isEmpty ? Colors.black : Colors.red
+                                      ),
+                                    borderRadius: BorderRadius.all(Radius.circular(8))),
+                                labelText: "CPF",
+                                hintStyle: TextStyle(color: Colors.black)),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: TextFormField(
+                            obscureText: true,
+                            controller: _senhaController,
+                            decoration: InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: _errorText.isEmpty ? Colors.black : Colors.red),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(8))),
+                                labelText: "Senha",
+                                hintStyle: TextStyle(color: Colors.black)),
+                          ),
+                        ),
+                        if (_errorText.isNotEmpty)
+                          Text(
+                            _errorText,
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 14,
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 10),
-                            child: TextFormField(
-                            inputFormatters: [CPFMask()],
-                              controller: _cpfController,
-                              decoration: InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: _errorText.isEmpty ? Colors.black : Colors.red
-                                        ),
-                                      borderRadius: BorderRadius.all(Radius.circular(8))),
-                                  labelText: "CPF",
-                                  hintStyle: TextStyle(color: Colors.black)),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 10),
-                            child: TextFormField(
-                              obscureText: true,
-                              controller: _senhaController,
-                              decoration: InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: _errorText.isEmpty ? Colors.black : Colors.red),
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(8))),
-                                  labelText: "Senha",
-                                  hintStyle: TextStyle(color: Colors.black)),
-                            ),
-                          ),
-                          if (_errorText.isNotEmpty)
-                            Text(
-                              _errorText,
-                              style: TextStyle(
-                                color: Colors.red,
-                                fontSize: 14,
-                              ),
-                            ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 16, bottom: 8),
-                            child: SizedBox(
-                              width: double.infinity,
-                              height: 46,
-                              child: ElevatedButton(
-                                onPressed: () => clickPostButton(context),
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        Color.fromRGBO(33, 71, 22, 1),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(8))),
-                                child: Text("Acessar"),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 16, bottom: 8),
+                          child: SizedBox(
                             width: double.infinity,
                             height: 46,
                             child: ElevatedButton(
-                              onPressed: () => Navigator.pushReplacementNamed(
-                                  context, '/resetpass'),
+                              onPressed: () => clickPostButton(context),
                               style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.white,
-                                  foregroundColor: Colors.black,
-                                  textStyle: const TextStyle(
-                                      fontWeight: FontWeight.bold),
+                                  backgroundColor:
+                                      Color.fromRGBO(33, 71, 22, 1),
                                   shape: RoundedRectangleBorder(
-                                      side: BorderSide(
-                                          color: Color.fromRGBO(33, 71, 22, 1)),
                                       borderRadius: BorderRadius.circular(8))),
-                              child: Text("Esqueci minha senha"),
+                              child: Text("Acessar"),
                             ),
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 46,
+                          child: ElevatedButton(
+                            onPressed: () => Navigator.pushReplacementNamed(
+                                context, '/resetpass'),
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white,
+                                foregroundColor: Colors.black,
+                                textStyle: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                                shape: RoundedRectangleBorder(
+                                    side: BorderSide(
+                                        color: Color.fromRGBO(33, 71, 22, 1)),
+                                    borderRadius: BorderRadius.circular(8))),
+                            child: Text("Esqueci minha senha"),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              ],
-            );
-          }),
-        ),
+              ),
+            ],
+          );
+        }),
       ),
     );
   }
