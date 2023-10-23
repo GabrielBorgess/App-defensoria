@@ -25,7 +25,7 @@ class ProfilePage extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 44),
                         child: Text(
-                          "Bem Vindo(a) Fulano",
+                          "Bem Vindo(a)",
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize:

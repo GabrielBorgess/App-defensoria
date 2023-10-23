@@ -17,34 +17,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _cpfController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
   String _errorText = '';
-  bool isLoading = false;
-
-  void showLoadingDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    barrierDismissible: false, // Impede que o usuário feche o diálogo tocando fora dele
-    builder: (context) {
-      return AlertDialog(
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            CircularProgressIndicator(), // Indicador de carregamento
-            SizedBox(height: 16),
-            Text("Carregando..."),
-          ],
-        ),
-      );
-    },
-  );
-}
 
   void clickPostButton(BuildContext context) async { 
-
-    setState(() {
-    isLoading = true;
-    });
-
-    showLoadingDialog(context);
 
     final String cpf = _cpfController.text.trim();
     final String senha = _senhaController.text.trim();
@@ -55,9 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (cpf.isEmpty || senha.isEmpty) {
       setState(() {
         _errorText = 'CPF e senha são obrigatórios.';
-        isLoading = false;
       });
-      Navigator.of(context, rootNavigator: true).pop();
 // Adicione este trecho para limpar a mensagem de erro após 3 segundos.
       Future.delayed(Duration(seconds: 3), () {
         setState(() {
@@ -69,7 +41,6 @@ class _LoginScreenState extends State<LoginScreen> {
         _errorText = result;
       });
 // Adicione este trecho para limpar a mensagem de erro após 3 segundos.
-      Navigator.of(context, rootNavigator: true).pop();
       Future.delayed(Duration(seconds: 3), () {
         setState(() {
           _errorText = '';

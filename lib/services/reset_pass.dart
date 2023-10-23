@@ -21,6 +21,7 @@ Future<void> cpfSearchReset(context, String cpf) async {
     print('token armazenado: $resetToken');
 
     Navigator.pushReplacementNamed(context, '/resetpass_auth');
+    
   } else {
     print('Falha na solicitação POST');
     print('Código de status: ${response.statusCode}');
