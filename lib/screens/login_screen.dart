@@ -1,8 +1,5 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'dart:async';
 import '../widgets/header_home.dart';
 import '../services/login.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +13,6 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _cpfController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
-  String _errorText = '';
 
   void clickPostButton(BuildContext context) async { 
 
@@ -24,32 +20,9 @@ class _LoginScreenState extends State<LoginScreen> {
     final String senha = _senhaController.text.trim();
     final String cpfNovo = maskCpf(cpf);
 
-    final result = await login(context,cpfNovo,senha);
-
-    if (cpf.isEmpty || senha.isEmpty) {
-      setState(() {
-        _errorText = 'CPF e senha são obrigatórios.';
-      });
-// Adicione este trecho para limpar a mensagem de erro após 3 segundos.
-      Future.delayed(Duration(seconds: 3), () {
-        setState(() {
-          _errorText = '';
-        });
-      });
-    } else {
-      setState(() {
-        _errorText = result;
-      });
-// Adicione este trecho para limpar a mensagem de erro após 3 segundos.
-      Future.delayed(Duration(seconds: 3), () {
-        setState(() {
-          _errorText = '';
-        });
-      });
-      login(context, cpf, senha).then((authToken) {
+    login(context, cpfNovo, senha).then((authToken) {
       context.read<AuthState>().setAuthToken(authToken);
     });
-    }  
   }
 
   @override
@@ -91,7 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             controller: _cpfController,
                             decoration: InputDecoration(
                                 enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: _errorText.isEmpty ? Colors.black : Colors.red
+                                    borderSide: BorderSide(color: Colors.black 
                                       ),
                                     borderRadius: BorderRadius.all(Radius.circular(8))),
                                 labelText: "CPF",
@@ -105,21 +78,13 @@ class _LoginScreenState extends State<LoginScreen> {
                             controller: _senhaController,
                             decoration: InputDecoration(
                                 enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: _errorText.isEmpty ? Colors.black : Colors.red),
+                                    borderSide: BorderSide(color: Colors.black),
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(8))),
                                 labelText: "Senha",
                                 hintStyle: TextStyle(color: Colors.black)),
                           ),
                         ),
-                        if (_errorText.isNotEmpty)
-                          Text(
-                            _errorText,
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontSize: 14,
-                            ),
-                          ),
                       ],
                     ),
                     Column(

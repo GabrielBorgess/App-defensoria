@@ -52,12 +52,13 @@ class ProfilePage extends StatelessWidget {
                                     children: [
                                       Text("Minhas solicitações",
                                           style: TextStyle(
-                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black54,
+                                              fontWeight: FontWeight.w400,
                                               fontSize: MediaQuery.of(context)
                                                       .size
                                                       .height *
                                                   0.02)),
-                                      Text("Acompanhar solicitações",
+                                      Text("(Em desenvolvimento)",
                                           style: TextStyle(
                                               color: Colors.black54,
                                               fontWeight: FontWeight.w400,
@@ -83,7 +84,7 @@ class ProfilePage extends StatelessWidget {
                                 decoration:
                                     BoxDecoration(color: Colors.black12)),
                           )),
-                      GestureDetector(
+                      InkWell(
                         onTap: () {
                           Navigator.push(
                               context,
@@ -99,8 +100,7 @@ class ProfilePage extends StatelessWidget {
                                 Padding(
                                   padding: const EdgeInsets.only(left: 10),
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text("Alterar dados",
                                           style: TextStyle(
@@ -126,6 +126,7 @@ class ProfilePage extends StatelessWidget {
                           ],
                         ),
                       ),
+
                       Padding(
                           padding: const EdgeInsets.only(top: 12, bottom: 20),
                           child: SizedBox(
@@ -151,12 +152,13 @@ class ProfilePage extends StatelessWidget {
                                     children: [
                                       Text("Acessar informações",
                                           style: TextStyle(
-                                              fontWeight: FontWeight.bold,
+                                            color: Colors.black54,
+                                              fontWeight: FontWeight.w400,
                                               fontSize: MediaQuery.of(context)
                                                       .size
                                                       .height *
                                                   0.02)),
-                                      Text("Informações no site",
+                                      Text("(Em desenvolvimento)",
                                           style: TextStyle(
                                               color: Colors.black54,
                                               fontWeight: FontWeight.w400,
@@ -198,12 +200,13 @@ class ProfilePage extends StatelessWidget {
                                     children: [
                                       Text("Chat Bot",
                                           style: TextStyle(
-                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black54,
+                                              fontWeight: FontWeight.w400,
                                               fontSize: MediaQuery.of(context)
                                                       .size
                                                       .height *
                                                   0.02)),
-                                      Text("Tire suas dúvidas com o chat bot",
+                                      Text("(Em desenvolvimento)",
                                           style: TextStyle(
                                               color: Colors.black54,
                                               fontWeight: FontWeight.w400,

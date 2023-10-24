@@ -54,6 +54,7 @@ class ChangeDataScreen extends StatelessWidget {
                         child: Text("Bairro"),
                       ),
                       TextFormField(
+                        controller: _bairroController,
                         decoration: const InputDecoration(
                           enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.black),
@@ -71,6 +72,7 @@ class ChangeDataScreen extends StatelessWidget {
                         child: Text("Número"),
                       ),
                       TextFormField(
+                        controller: _numeroController,
                         decoration: const InputDecoration(
                           enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.black),
@@ -88,6 +90,7 @@ class ChangeDataScreen extends StatelessWidget {
                         child: Text("CEP"),
                       ),
                       TextFormField(
+                        controller: _cepController,
                         decoration: const InputDecoration(
                           enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.black),
@@ -147,24 +150,6 @@ class ChangeDataScreen extends StatelessWidget {
                             ),
                           ],
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 10, bottom: 10),
-                              child: Text("Número de celular 2"),
-                            ),
-                            TextFormField(
-                              decoration: const InputDecoration(
-                                enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.black),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(8))),
-                              ),
-                            ),
-                          ],
-                        ),
                         Padding(
                           padding: const EdgeInsets.only(bottom: 44, top: 30),
                           child: SizedBox(
@@ -196,13 +181,19 @@ class ChangeDataScreen extends StatelessWidget {
 
 final TextEditingController _adressController = TextEditingController();
 final TextEditingController _phoneController = TextEditingController();
+final TextEditingController _bairroController = TextEditingController();
+final TextEditingController _cepController = TextEditingController();
+final TextEditingController _numeroController = TextEditingController();
+
 
 void changeData(context) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   final authToken = prefs.getString('auth_token') ?? "";
 
-  final String newAdress = _adressController.text.trim();
+  final String newAdress = ('${_adressController.text.trim()} ${_bairroController.text.trim()} ${_numeroController.text.trim()} ${_cepController.text.trim()}'
+  );
   final String newPhone = _phoneController.text.trim();
+
 
   changeDataAuth(context, authToken, newAdress, newPhone);
 }
