@@ -11,9 +11,9 @@ Future<String> login(context, String cpf, String senha) async {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            CircularProgressIndicator(), // Ícone de carregamento
+            CircularProgressIndicator(),
             SizedBox(height: 16),
-            Text("Realizando login..."), // Texto informativo
+            Text("Realizando login..."),
           ],
         ),
       );
@@ -26,7 +26,7 @@ Future<String> login(context, String cpf, String senha) async {
     final uri = Uri.parse("http://172.88.0.224:3000/entrar");
     final response = await http.post(uri, body: request);
 
-    Navigator.pop(context); // Fecha o diálogo de carregamento
+    Navigator.pop(context);
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseBody = json.decode(response.body);
@@ -38,6 +38,7 @@ Future<String> login(context, String cpf, String senha) async {
         prefs.setString('auth_token', authToken);
 
         Navigator.pushReplacementNamed(context, '/profile');
+        return '';
       }
       if (responseBody.containsKey('firstAccess')) {
         String authToken = responseBody['token'];
@@ -50,19 +51,50 @@ Future<String> login(context, String cpf, String senha) async {
 
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString('auth_token', authToken);
-
-        // context.read<AuthState>().setAuthToken(authToken);
-
-        return authToken;
-      } else {
-        return 'Informações incorretas.';
+        return '';
       }
-    } else {
+      return '';
+    } else if (cpf.isEmpty || senha.isEmpty ){ 
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              content: Text("Os campos não podem estar vazios."),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text("OK"),
+                ),
+              ],
+            );
+          },
+        );
       print('Erro na solicitação POST: ${response.statusCode} ${response.body}');
-      return ('Informações incorretas.');
+      return '';
+    } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: Text("CPF e/ou senha incorretos. Tente novamente."),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("OK"),
+              ),
+            ],
+          );
+        },
+      );
+      return '';
     }
   } catch (e) {
     print('Erro: $e');
+    // Mostra uma caixa de diálogo informando que houve uma falha no login
     showDialog(
       context: context,
       builder: (BuildContext context) {

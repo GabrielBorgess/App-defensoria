@@ -1,6 +1,5 @@
 import '../widgets/header_home.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
 import '../services/reset_pass.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -107,8 +106,6 @@ class ResetPasswordAuth extends StatefulWidget {
 }
 
 class _ResetPasswordAuthState extends State<ResetPasswordAuth> {
-  String _errorText = '';
-  bool passwordMismatch = false;
 
 void forgotPass(context) async {
   final String emailCode = _emailCodeController.text.trim();
@@ -118,23 +115,7 @@ void forgotPass(context) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   final resetToken = prefs.getString('reset_token') ?? "";
 
-  if (newpass1 == newPass2) {
-    resetPassAuth(context, resetToken, emailCode, newpass1);
-    Navigator.pushReplacementNamed(context, '/home');
-  } else {
-          setState(() {
-        _errorText = 'Senhas não conferem.';
-        passwordMismatch = true;
-      });
-
-      // Adicione este trecho para limpar a mensagem de erro após 3 segundos.
-      Future.delayed(Duration(seconds: 3), () {
-        setState(() {
-          _errorText = '';
-          passwordMismatch = false;
-        });
-      });
-  }
+  resetPassAuth(context, resetToken, emailCode, newpass1, newPass2);
 }
   @override
   Widget build(BuildContext context) {
@@ -203,7 +184,7 @@ void forgotPass(context) async {
                           decoration: InputDecoration(
                               enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
-                          color: passwordMismatch ? Colors.red : Colors.black,
+                          color: Colors.black,
                         ),  
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(8))),
@@ -219,7 +200,7 @@ void forgotPass(context) async {
                           decoration: InputDecoration(
                               enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
-                          color: passwordMismatch ? Colors.red : Colors.black,
+                          color: Colors.black,
                         ),  
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(8))),
@@ -227,14 +208,6 @@ void forgotPass(context) async {
                               hintStyle: TextStyle(color: Colors.black)),
                         ),
                       ),
-                      if (_errorText.isNotEmpty)
-                          Text(
-                            _errorText,
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontSize: 14,
-                            ),
-                          ),
                     ],
                   ),
                   Column(
@@ -250,7 +223,7 @@ void forgotPass(context) async {
                                 backgroundColor: Color.fromRGBO(33, 71, 22, 1),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8))),
-                            child: Text("Resetar sua senha."),
+                            child: Text("Resetar sua senha"),
                           ),
                         ),
                       ),

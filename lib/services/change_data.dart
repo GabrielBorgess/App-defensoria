@@ -40,7 +40,7 @@ Future<void> changeDataAuth(context, String token, String newAddress, String new
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          content: Text("Alteração bem-sucedida"),
+          content: Text("Solicitação enviada para análise."),
           actions: <Widget>[
             TextButton(
               onPressed: () {
