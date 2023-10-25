@@ -19,7 +19,6 @@ class _LoginScreenState extends State<LoginScreen> {
     final String cpf = _cpfController.text.trim();
     final String senha = _senhaController.text.trim();
     final String cpfNovo = maskCpf(cpf);
-
     login(context, cpfNovo, senha).then((authToken) {
       context.read<AuthState>().setAuthToken(authToken);
     });

@@ -100,7 +100,7 @@ showDialog(
 Future<void> resetPassAuth(
     context, String token, String emailCode, String newPass1, String newPass2) async {
   String url = 'http://172.88.0.224:3000/recuperacaoCod';
-
+  print(emailCode);
   if (newPass1.isEmpty || newPass2.isEmpty) {
     showDialog(
       context: context,
@@ -148,7 +148,23 @@ Future<void> resetPassAuth(
     if (response.statusCode == 201) {
       print('Solicitação POST bem-sucedida');
       print('Resposta: ${response.body}');
-      Navigator.pushReplacementNamed(context, '/home');
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: Text("Senha alterada com sucesso!"),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                        Navigator.pushReplacementNamed(context, '/home');
+                },
+                child: Text("OK"),
+              )
+            ],
+          );
+        },
+      );
     } else {
       showDialog(
         context: context,

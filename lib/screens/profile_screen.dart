@@ -3,8 +3,10 @@ import 'change_data_screen.dart';
 import '../widgets/header_home.dart';
 
 class ProfilePage extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -37,7 +39,8 @@ class ProfilePage extends StatelessWidget {
                   Column(
                     children: [
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                        },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -137,7 +140,8 @@ class ProfilePage extends StatelessWidget {
                                     BoxDecoration(color: Colors.black12)),
                           )),
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                        },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [

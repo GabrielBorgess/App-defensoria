@@ -20,10 +20,10 @@ Future<String> login(context, String cpf, String senha) async {
     },
   );
 
-  try {
-    Map<String, dynamic> request = {'cpf': cpf, 'senha': senha};
+  Map<String, dynamic> request = {'cpf': cpf, 'senha': senha};
 
-    final uri = Uri.parse("http://172.88.0.224:3000/entrar");
+  final uri = Uri.parse("http://172.88.0.224:3000/entrar");
+  try {
     final response = await http.post(uri, body: request);
 
     Navigator.pop(context);
@@ -35,12 +35,10 @@ Future<String> login(context, String cpf, String senha) async {
         String authToken = responseBody['token'];
 
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setString('auth_token', authToken);
+        await prefs.setString('auth_token', authToken);
 
         Navigator.pushReplacementNamed(context, '/profile');
-        return '';
-      }
-      if (responseBody.containsKey('firstAccess')) {
+      } else if (responseBody.containsKey('firstAccess')) {
         String authToken = responseBody['token'];
         bool firstAccess = responseBody['firstAccess'];
 
@@ -50,27 +48,27 @@ Future<String> login(context, String cpf, String senha) async {
         print(firstAccess);
 
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setString('auth_token', authToken);
-        return '';
+        await prefs.setString('auth_token', authToken);
+        print(responseBody);
       }
       return '';
-    } else if (cpf.isEmpty || senha.isEmpty ){ 
+    } else if (cpf.isEmpty || senha.isEmpty) {
       showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              content: Text("Os campos não podem estar vazios."),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text("OK"),
-                ),
-              ],
-            );
-          },
-        );
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: Text("Os campos não podem estar vazios."),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("OK"),
+              ),
+            ],
+          );
+        },
+      );
       print('Erro na solicitação POST: ${response.statusCode} ${response.body}');
       return '';
     } else {
@@ -94,7 +92,6 @@ Future<String> login(context, String cpf, String senha) async {
     }
   } catch (e) {
     print('Erro: $e');
-    // Mostra uma caixa de diálogo informando que houve uma falha no login
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -115,39 +112,60 @@ Future<String> login(context, String cpf, String senha) async {
   }
 }
 
+
 //-- Definir senha nova para primeiro acesso
 
-Future<void> resetFirstLoginPass(context, String senha, String token) async {
-  // URL para a qual você deseja enviar a solicitação POST
-  String url = 'http://172.88.0.224:3000/reset';
-  print('senha digitada ja na função: $senha');
-  print('token de verificação ja na função: $token');
-  print(token);
+Future<void> resetFirstLoginPass(context, String senha, String senha2) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? token = prefs.getString('auth_token'); // Recupere o token de SharedPreferences
 
-  // Corpo da solicitação, você pode incluir a senha digitada pelo usuário aqui
-  Map<String, String> body = {
-    'senha': senha,
-  };
+  if (token != null && senha == senha2) {
+    String url = 'http://172.88.0.224:3000/reset';
+    print('senha digitada na função: $senha');
+    print('token de verificação na função: $token');
 
-  // Realiza a solicitação POST
-  http.Response response = await http.post(
-    Uri.parse(url),
-    headers: {
-      'Authorization': 'Bearer $token',
-    },
-    body: body,
-  );
+    Map<String, String> body = {
+      'senha': senha,
+    };
 
-  // Verifica a resposta da solicitação
-  if (response.statusCode == 201) {
-    print('Solicitação POST bem-sucedida');
-    print('Resposta: ${response.body}');
-  } else if(response.statusCode == 500) {
-    Navigator.pushReplacementNamed(context, '/error_screen');
+    http.Response response = await http.post(
+      Uri.parse(url),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+      body: body,
+    );
+
+    if (response.statusCode == 201) {
+      print('Solicitação POST bem-sucedida');
+      print('Resposta: ${response.body}');
+      Navigator.pushReplacementNamed(context, '/profile');
+    } else if (response.statusCode == 500) {
+      Navigator.pushReplacementNamed(context, '/error_screen');
+    } else {
+      print('Falha na solicitação POST');
+      print('Código de status: ${response.statusCode}');
+      print('Resposta: ${response.body}');
+    }
   } else {
-    print('Falha na solicitação POST');
-    print('Código de status: ${response.statusCode}');
-    print('Resposta: ${response.body}');
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Text("Falha ao realizar login. Tente novamente mais tarde."),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
+// Corpo da solicitação, você pode incluir a senha digitada pelo usuário aqui
+
 // --

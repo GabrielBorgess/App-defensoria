@@ -1,6 +1,5 @@
 import '../widgets/header_home.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
 import '../services/login.dart';
 import 'package:provider/provider.dart';
 import '../services/auth_state.dart';
@@ -17,28 +16,18 @@ class _FirstAccessState extends State<FirstAccess> {
   final TextEditingController _novaSenhaController = TextEditingController();
   final TextEditingController _novaSenhaAgainController = TextEditingController();
   
-  void clickPostButton(BuildContext context) async {
+  void clickPostButton(BuildContext context)  {
   final String senha1 = _novaSenhaController.text.trim();
   final String senha2 = _novaSenhaAgainController.text.trim();
 
   final authToken = context.read<AuthState>().authToken;
 
-  // _checkAuthAndNavigate();
-  if (senha1 == senha2) {
-  resetFirstLoginPass(context, senha1, authToken);
-  Navigator.pushReplacementNamed(context, '/profile');
-  } else {
-      setState(() {
-        _errorText = 'Senhas não conferem.';
-      });
+  print('Token no clickpost: $authToken');
 
-      // Adicione este trecho para limpar a mensagem de erro após 3 segundos.
-      Future.delayed(Duration(seconds: 3), () {
-        setState(() {
-          _errorText = '';
-        });
-      });
-  }
+  print('Token antes de chamar a função reset $authToken');
+  
+  resetFirstLoginPass(context, senha1, senha2);
+
 }
   @override
   Widget build(BuildContext context) {
