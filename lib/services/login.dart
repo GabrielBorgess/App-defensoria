@@ -1,3 +1,4 @@
+import 'package:defensoria/services/get.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -30,13 +31,13 @@ Future<String> login(context, String cpf, String senha) async {
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseBody = json.decode(response.body);
-      print(responseBody);
+
       if (responseBody.containsKey('firstAccess') != true) {
         String authToken = responseBody['token'];
 
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('auth_token', authToken);
-
+        getName(context, cpf, authToken);
         Navigator.pushReplacementNamed(context, '/profile');
       } else if (responseBody.containsKey('firstAccess')) {
         String authToken = responseBody['token'];
@@ -118,16 +119,29 @@ Future<String> login(context, String cpf, String senha) async {
 Future<void> resetFirstLoginPass(context, String senha, String senha2) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? token = prefs.getString('auth_token'); // Recupere o token de SharedPreferences
-
-  if (token != null && senha == senha2) {
     String url = 'http://172.88.0.224:3000/reset';
-    print('senha digitada na função: $senha');
-    print('token de verificação na função: $token');
 
     Map<String, String> body = {
       'senha': senha,
     };
-
+  if (senha.isEmpty || senha2.isEmpty) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Text("Os campos não podem estar vazios."),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+  } else if (token != null && senha == senha2) {
     http.Response response = await http.post(
       Uri.parse(url),
       headers: {
@@ -135,16 +149,44 @@ Future<void> resetFirstLoginPass(context, String senha, String senha2) async {
       },
       body: body,
     );
-
     if (response.statusCode == 201) {
       print('Solicitação POST bem-sucedida');
       print('Resposta: ${response.body}');
-      Navigator.pushReplacementNamed(context, '/profile');
-    } else if (response.statusCode == 500) {
-      Navigator.pushReplacementNamed(context, '/error_screen');
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: Text("Senha alterada com sucesso!"),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                        Navigator.pushReplacementNamed(context, '/home');
+                },
+                child: Text("OK"),
+              )
+            ],
+          );
+        },
+      );
     } else {
       print('Falha na solicitação POST');
       print('Código de status: ${response.statusCode}');
+      print('Resposta: ${response.body}');
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: Text("Falha ao realizar a troca de senha. Tente novamente mais tarde."),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("OK"),
+              ),
+            ]
+          );});
       print('Resposta: ${response.body}');
     }
   } else {
@@ -152,7 +194,7 @@ Future<void> resetFirstLoginPass(context, String senha, String senha2) async {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          content: Text("Falha ao realizar login. Tente novamente mais tarde."),
+          content: Text("Senhas não conferem."),
           actions: <Widget>[
             TextButton(
               onPressed: () {

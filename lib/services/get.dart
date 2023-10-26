@@ -10,21 +10,21 @@ Future<String> getName(context, String cpf, String token) async {
     'Authorization': 'Bearer $token',
   };
 
-  print('so pra ter certeza: $token');
-
    http.Response response = await http.get(
     Uri.parse(url),
     headers: headers,
   );
 
-
-  if (response.statusCode == 201) {
+  if (response.statusCode == 200) {
     final Map<String, dynamic> responseBody = json.decode(response.body);
-
+  print('NAO TA NO IF');
+    if (responseBody.containsKey('nome')) {
     String userName = responseBody['nome'];
 
+    print(userName);
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('user_name', userName);
+    await prefs.setString('user_name', userName);
 
     print('Resposta: ${response.body}');
     print('PEGAMOS O NOME!!!');
@@ -37,4 +37,5 @@ Future<String> getName(context, String cpf, String token) async {
     print('Resposta: ${response.body}');
     return '';
   }
+} return '';
 }
