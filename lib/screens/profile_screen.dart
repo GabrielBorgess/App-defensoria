@@ -1,3 +1,4 @@
+import 'package:defensoria/screens/solicitations_screen.dart';
 import 'package:flutter/material.dart';
 import 'change_data_screen.dart';
 import '../widgets/header_home.dart';
@@ -51,8 +52,12 @@ class ProfilePage extends StatelessWidget {
                   ),
                   Column(
                     children: [
-                      GestureDetector(
+                      InkWell(
                         onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SolicitationsPage()));
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -63,18 +68,16 @@ class ProfilePage extends StatelessWidget {
                                 Padding(
                                   padding: const EdgeInsets.only(left: 10),
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text("Minhas solicitações",
                                           style: TextStyle(
-                                              color: Colors.black54,
-                                              fontWeight: FontWeight.w400,
+                                              fontWeight: FontWeight.bold,
                                               fontSize: MediaQuery.of(context)
                                                       .size
                                                       .height *
                                                   0.02)),
-                                      Text("(Em desenvolvimento)",
+                                      Text("Acompanhar solicitações",
                                           style: TextStyle(
                                               color: Colors.black54,
                                               fontWeight: FontWeight.w400,
@@ -142,7 +145,6 @@ class ProfilePage extends StatelessWidget {
                           ],
                         ),
                       ),
-
                       Padding(
                           padding: const EdgeInsets.only(top: 12, bottom: 20),
                           child: SizedBox(
@@ -262,6 +264,7 @@ class ProfilePage extends StatelessWidget {
     Future<String> getUserName() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final userName = prefs.getString('user_name');
+    print(userName);
     return userName ?? "";
   }
 }

@@ -15,27 +15,51 @@ Future<String> getName(context, String cpf, String token) async {
     headers: headers,
   );
 
-  if (response.statusCode == 200) {
+if (response.statusCode == 201) {
     final Map<String, dynamic> responseBody = json.decode(response.body);
-  print('NAO TA NO IF');
-    if (responseBody.containsKey('nome')) {
-    String userName = responseBody['nome'];
+    
+    if (responseBody.containsKey('DadosUser')) {
+      final Map<String, dynamic> dadosUser = responseBody['DadosUser'];
+      String userName = dadosUser['nome'];
 
-    print(userName);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('user_name', userName);
 
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('user_name', userName);
+      if (responseBody.containsKey('DadosPeticao')) {
+        final List<dynamic> dadosPeticao = responseBody['DadosPeticao'];
+        if (dadosPeticao.isEmpty) {
+          // "DadosPeticao" é um array vazio
+          // Lide com a situação em que não há petições
+          print('Sem petições disponíveis');
+        } else {
+          // "DadosPeticao" contém petições, você pode acessá-las aqui
+          for (var peticao in dadosPeticao) {
+            String peticaoTipo = peticao['Tipo'];
+            String peticaoData = peticao['DataPeticao'];
+            String peticaoStatus = peticao['Status'];
+            print('Tipo de Petição: $peticaoTipo');
+            print('Data da Petição: $peticaoData');
+            print('Status da Petição: $peticaoStatus');
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            await prefs.setString('Tipo', peticaoTipo);
 
-    print('Resposta: ${response.body}');
-    print('PEGAMOS O NOME!!!');
-    print('Nome: $userName');
+            await prefs.setString('DataPeticao', peticaoData);
 
-    return userName;
-  } else {
-    print('Falha na solicitação POST');
-    print('Código de status: ${response.statusCode}');
-    print('Resposta: ${response.body}');
-    return '';
+            await prefs.setString('Status', peticaoStatus);
+          }
+        }
+      }
+      
+      return userName;
+    } else {
+      print('Falha na solicitação POST');
+      print('Código de status: ${response.statusCode}');
+      print('Resposta: ${response.body}');
+      return '';
+    }
   }
-} return '';
+  
+  return '';
 }
+
+

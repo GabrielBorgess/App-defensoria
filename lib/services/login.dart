@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:async';
 
 Future<String> login(context, String cpf, String senha) async {
   showDialog(
@@ -21,9 +22,17 @@ Future<String> login(context, String cpf, String senha) async {
     },
   );
 
+  void startDataUpdateTimer(context, String cpf, String authToken) {
+  const duration = Duration(seconds: 15); // Defina o intervalo desejado
+  Timer.periodic(duration, (Timer timer) {
+    // Chame a função getName para atualizar os dados
+    getName(context, cpf, authToken);
+  });
+}
+
   Map<String, dynamic> request = {'cpf': cpf, 'senha': senha};
 
-  final uri = Uri.parse("http://172.88.0.224:3000/entrar");
+  final uri = Uri.parse("http://172.88.0.224:3000/assistido/entrar");
   try {
     final response = await http.post(uri, body: request);
 
@@ -37,7 +46,10 @@ Future<String> login(context, String cpf, String senha) async {
 
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('auth_token', authToken);
-        getName(context, cpf, authToken);
+        await getName(context, cpf, authToken);
+
+        startDataUpdateTimer(context, cpf, authToken);
+
         Navigator.pushReplacementNamed(context, '/profile');
       } else if (responseBody.containsKey('firstAccess')) {
         String authToken = responseBody['token'];
