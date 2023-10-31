@@ -18,39 +18,40 @@ Future<String> getName(context, String cpf, String token) async {
 if (response.statusCode == 201) {
     final Map<String, dynamic> responseBody = json.decode(response.body);
     
-    if (responseBody.containsKey('DadosUser')) {
-      final Map<String, dynamic> dadosUser = responseBody['DadosUser'];
-      String userName = dadosUser['nome'];
+      if (responseBody.containsKey('DadosPeticao')) {
+    final List<dynamic> dadosPeticao = responseBody['DadosPeticao'];
+    if (dadosPeticao.isEmpty) {
+      // "DadosPeticao" é um array vazio
+      // Lide com a situação em que não há petições
+      print('Sem petições disponíveis');
+    } else {
+      // "DadosPeticao" contém petições, você pode acessá-las aqui
+      List<String> peticaoTipoList = [];
+      List<String> peticaoDataList = [];
+      List<String> peticaoStatusList = [];
+
+
+
+      for (var peticao in dadosPeticao) {
+        String peticaoTipo = peticao['Tipo'];
+        String peticaoData = peticao['DataPeticao'];
+        int peticaoStatus = peticao['Status'];
+
+        print(peticaoTipo);
+
+        peticaoTipoList.add(peticaoTipo);
+        peticaoDataList.add(peticaoData);
+        peticaoStatusList.add(peticaoStatus.toString());
+      }
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('user_name', userName);
-
-      if (responseBody.containsKey('DadosPeticao')) {
-        final List<dynamic> dadosPeticao = responseBody['DadosPeticao'];
-        if (dadosPeticao.isEmpty) {
-          // "DadosPeticao" é um array vazio
-          // Lide com a situação em que não há petições
-          print('Sem petições disponíveis');
-        } else {
-          // "DadosPeticao" contém petições, você pode acessá-las aqui
-          for (var peticao in dadosPeticao) {
-            String peticaoTipo = peticao['Tipo'];
-            String peticaoData = peticao['DataPeticao'];
-            String peticaoStatus = peticao['Status'];
-            print('Tipo de Petição: $peticaoTipo');
-            print('Data da Petição: $peticaoData');
-            print('Status da Petição: $peticaoStatus');
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-            await prefs.setString('Tipo', peticaoTipo);
-
-            await prefs.setString('DataPeticao', peticaoData);
-
-            await prefs.setString('Status', peticaoStatus);
-          }
-        }
-      }
+      await prefs.setStringList('Tipo', peticaoTipoList);
+      await prefs.setStringList('DataPeticao', peticaoDataList);
+      await prefs.setStringList('Status', peticaoStatusList);
+    }
+  }
       
-      return userName;
+      return '';
     } else {
       print('Falha na solicitação POST');
       print('Código de status: ${response.statusCode}');
@@ -59,7 +60,5 @@ if (response.statusCode == 201) {
     }
   }
   
-  return '';
-}
 
 

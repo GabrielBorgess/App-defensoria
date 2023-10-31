@@ -2,6 +2,13 @@ import 'package:flutter/material.dart';
 import '../widgets/header_home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+class PeticaoData {
+  final String status;
+  final String tipo;
+  final String data;
+
+  PeticaoData({required this.status, required this.tipo, required this.data});
+}
 class SolicitationsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -25,92 +32,110 @@ class SolicitationsPage extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 44),
                         child: Text(
-                                "Minhas Solicitações",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: MediaQuery.of(context).size.height * 0.03,
-                                ),
-                              )    
+                          "Minhas Solicitações",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: MediaQuery.of(context).size.height * 0.03,
+                          ),
+                        ),
                       ),
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          FutureBuilder<PeticaoData>(
-                            future: getPeticao(),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              PeticaoData peticaoData = snapshot.data!;
-                              String peticaoTipo = peticaoData.tipo;
-                              String peticaoData1 = peticaoData.data;
-                              String peticaoStatus = peticaoData.status;
-                              return Padding(
-                              padding: const EdgeInsets.only(left: 10),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(peticaoTipo,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.02)),
-                                  Text(peticaoData1,
-                                      style: TextStyle(
-                                          color: Colors.black54,
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.018))
-                                ],
-                              ),
-                            ); 
-                            } else {
-                             return Padding(
-                              padding: const EdgeInsets.only(left: 10),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text("Minhas solicitações",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.02)),
-                                  Text("Acompanhar solicitações",
-                                      style: TextStyle(
-                                          color: Colors.black54,
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.018))
+                  FutureBuilder<List<PeticaoData>?>(
+                  future: getPeticoes(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return Text('Erro: ${snapshot.error}');
+                    } else if (!snapshot.hasData || snapshot.data == null || snapshot.data!.isEmpty) {
+                      return Text("Nenhuma petição encontrada");
+                    } else {
+                      List<PeticaoData> peticoes = snapshot.data!;
+                        return Column(
+                          children: peticoes.asMap().entries.map((entry) {
+                            PeticaoData peticao = entry.value;
+                            String peticaoStatus = peticao.status;
+                            return Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 0),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            peticao.tipo,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize:
+                                                  MediaQuery.of(context).size.height * 0.02,
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(top: 5),
+                                            child: Text(
+                                              peticao.data,
+                                              style: TextStyle(
+                                                color: Colors.black54,
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: MediaQuery.of(context).size.height * 0.018,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            color: (peticaoStatus == '0'
+                                                ? Colors.yellow[800]
+                                                : peticaoStatus == '1'
+                                                    ? Colors.green[800]
+                                                    : Colors.red[800]),
+                                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                                          ),
+                                          width: MediaQuery.of(context).size.width * 0.2,
+                                          height: MediaQuery.of(context).size.height * 0.03,
+                                          child: Center(
+                                            child: Text(
+                                              peticaoStatus == '0'
+                                                  ? 'em Análise'
+                                                  : (peticaoStatus == '1' ? 'Aceito' : 'Rejeitado'),
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: MediaQuery.of(context).size.height * 0.017,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ],
                                 ),
-                              );
-                            }
-                          } 
-                         )
-                        ],
-                      ),
-                      Image.asset('assets/seta.png'),
-                    ],
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 12, bottom: 20),
+                                  child: SizedBox(
+                                    width: double.infinity,
+                                    height: 1.5,
+                                    child: const DecoratedBox(
+                                      decoration: BoxDecoration(color: Colors.black12),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          }).toList(),
+                        );
+                      }
+                    },
                   ),
-                  Padding(
-                      padding: const EdgeInsets.only(top: 12, bottom: 20),
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: 1.5,
-                        child: const DecoratedBox(
-                            decoration:
-                                BoxDecoration(color: Colors.black12)),
-                      )),
                 ],
               ),
             ),
@@ -120,24 +145,24 @@ class SolicitationsPage extends StatelessWidget {
     );
   }
 
-Future<PeticaoData> getPeticao() async {
+Future<List<PeticaoData>> getPeticoes() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  final peticaoData = prefs.getString('DataPeticao') ?? "";
-  final peticaoStatus = prefs.getString('Status') ?? "";
-  final peticaoTipo = prefs.getString('Tipo') ?? "";
+  final List<String> peticaoStatusList = prefs.getStringList('Status') ?? [];
+  final List<String> peticaoTipoList = prefs.getStringList('Tipo') ?? [];
+  final List<String> peticaoDataList = prefs.getStringList('DataPeticao') ?? [];
 
-  print(peticaoStatus);
-  print(peticaoTipo);
-  print(peticaoData);
+  List<PeticaoData> peticoes = [];
 
-  return PeticaoData(status: peticaoStatus, tipo: peticaoTipo, data: peticaoData);
+  for (int i = 0; i < peticaoStatusList.length; i++) {
+    PeticaoData peticao = PeticaoData(
+      status: peticaoStatusList[i],
+      tipo: peticaoTipoList[i],
+      data: peticaoDataList[i],
+    );
+    peticoes.add(peticao);
+  }
+
+  return peticoes;
 }
 
-}
-   class PeticaoData {
-  final String status;
-  final String tipo;
-  final String data;
-
-  PeticaoData({required this.status, required this.tipo, required this.data});
 }

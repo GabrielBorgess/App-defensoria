@@ -23,7 +23,7 @@ Future<String> login(context, String cpf, String senha) async {
   );
 
   void startDataUpdateTimer(context, String cpf, String authToken) {
-  const duration = Duration(seconds: 15); // Defina o intervalo desejado
+  const duration = Duration(seconds: 10); // Defina o intervalo desejado
   Timer.periodic(duration, (Timer timer) {
     // Chame a função getName para atualizar os dados
     getName(context, cpf, authToken);
