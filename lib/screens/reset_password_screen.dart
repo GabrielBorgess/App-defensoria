@@ -1,3 +1,5 @@
+import 'package:flutter/services.dart';
+
 import '../widgets/header_home.dart';
 import 'package:flutter/material.dart';
 import '../services/reset_pass.dart';
@@ -44,6 +46,7 @@ class ResetPassword extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 10),
                         child: TextFormField(
+                            inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(11)],
                           controller: _cpfController,
                           decoration: const InputDecoration(
                               enabledBorder: OutlineInputBorder(
