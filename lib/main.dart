@@ -1,7 +1,7 @@
+import 'package:defensoria/screens/policy_screen.dart';
 import 'package:flutter/material.dart';
 import 'screens/profile_screen.dart';
 import 'screens/login_screen.dart';
-import 'screens/error_screen.dart';
 import 'screens/first_access_screen.dart';
 import 'screens/reset_password_screen.dart';
 import 'package:provider/provider.dart';
@@ -31,9 +31,9 @@ class MyApp extends StatelessWidget {
       home: LoginScreen(),
       routes: {
         '/profile': (context) => ProfilePage(),
-        '/error_screen': (context) => ErrorScreen(),
         '/primeiro_acesso': (context) => FirstAccess(),
         '/home': (context) => LoginScreen(),
+        '/policy': (context) => PrivacyPolicy(),
         '/resetpass': (context) => ResetPassword(),
         '/resetpass_auth': (context) => ResetPasswordAuth(),
       },

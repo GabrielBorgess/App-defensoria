@@ -1,9 +1,11 @@
+import 'package:defensoria/widgets/privacy_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../widgets/header_home.dart';
 import '../services/login.dart';
 import 'package:provider/provider.dart';
 import '../services/auth_state.dart';
+import 'package:flutter/gestures.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -15,11 +17,10 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _senhaController = TextEditingController();
 
   void clickPostButton(BuildContext context) async { 
-
     final String cpf = _cpfController.text.trim();
     final String senha = _senhaController.text.trim();
     final String cpfNovo = maskCpf(cpf);
-
+    
     login(context, cpfNovo, senha).then((authToken) {
       context.read<AuthState>().setAuthToken(authToken);
     });
@@ -128,6 +129,54 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
               ),
+              Container(
+                  alignment: Alignment.topLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 80, left: 31, right: 31),
+                    child: Text.rich(
+                      textAlign: TextAlign.center,
+                      TextSpan(
+                        text: 'Acesse nossos ', style: TextStyle(
+                        fontSize: 14, color: Colors.black, 
+                      ),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: 'Termos de Serviços', style: TextStyle(
+                            fontSize: 14, color: Colors.black,
+                            decoration: TextDecoration.underline,
+                          ),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) => buildSuccessDialog(context),
+                                );}
+                          ),
+                          TextSpan(
+                            text: ' e ', style: TextStyle(
+                            fontSize: 14, color: Colors.black
+                          ),
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: 'Política de Privacidade.', style: TextStyle(
+                                fontSize: 14, color: Colors.black,
+                                decoration: TextDecoration.underline
+                              ),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) => buildSuccessDialog(context),
+                                    );
+                                  }
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    ),
+                  )
+                ),
             ],
           );
         }),
@@ -159,3 +208,15 @@ String maskCpf(String cpf) {
   }
   return cpfNovo;
 }
+  Widget buildSuccessDialog(BuildContext context) {
+    return AlertDialog(
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          dialogBox(context),
+        ],
+      ),
+      actions: const <Widget>[],
+    );
+  }

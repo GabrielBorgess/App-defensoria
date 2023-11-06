@@ -1,6 +1,8 @@
+import 'package:defensoria/screens/solicitations_screen.dart';
 import 'package:flutter/material.dart';
 import 'change_data_screen.dart';
 import '../widgets/header_home.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatelessWidget {
   @override
@@ -24,20 +26,39 @@ class ProfilePage extends StatelessWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(bottom: 44),
-                        child: Text(
-                          "Bem Vindo(a)",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize:
-                                  MediaQuery.of(context).size.height * 0.03),
+                        child: FutureBuilder<String>(
+                          future: getUserName(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              String userName = snapshot.data!;
+                              return Text(
+                                "Bem Vindo(a) $userName",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: MediaQuery.of(context).size.height * 0.03,
+                                ),
+                              );
+                            } else {
+                              // Tratar o caso em que o nome de usuário não está disponível.
+                              return Text("Bem Vindo(a)", style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: MediaQuery.of(context).size.height * 0.03,
+                              ));
+                            }
+                          },
                         ),
                       ),
                     ],
                   ),
                   Column(
                     children: [
-                      GestureDetector(
-                        onTap: () {},
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SolicitationsPage()));
+                        },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -47,18 +68,16 @@ class ProfilePage extends StatelessWidget {
                                 Padding(
                                   padding: const EdgeInsets.only(left: 10),
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text("Minhas solicitações",
                                           style: TextStyle(
-                                              color: Colors.black54,
-                                              fontWeight: FontWeight.w400,
+                                              fontWeight: FontWeight.bold,
                                               fontSize: MediaQuery.of(context)
                                                       .size
                                                       .height *
                                                   0.02)),
-                                      Text("(Em desenvolvimento)",
+                                      Text("Acompanhar solicitações",
                                           style: TextStyle(
                                               color: Colors.black54,
                                               fontWeight: FontWeight.w400,
@@ -126,7 +145,6 @@ class ProfilePage extends StatelessWidget {
                           ],
                         ),
                       ),
-
                       Padding(
                           padding: const EdgeInsets.only(top: 12, bottom: 20),
                           child: SizedBox(
@@ -137,7 +155,8 @@ class ProfilePage extends StatelessWidget {
                                     BoxDecoration(color: Colors.black12)),
                           )),
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                        },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -241,5 +260,11 @@ class ProfilePage extends StatelessWidget {
         ),
       ),
     );
+  }
+    Future<String> getUserName() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final userName = prefs.getString('user_name');
+    print(userName);
+    return userName ?? "";
   }
 }

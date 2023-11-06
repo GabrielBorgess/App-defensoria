@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/change_data.dart';
 
@@ -90,6 +91,7 @@ class ChangeDataScreen extends StatelessWidget {
                         child: Text("CEP"),
                       ),
                       TextFormField(
+                        inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(8)],
                         controller: _cepController,
                         decoration: const InputDecoration(
                           enabledBorder: OutlineInputBorder(
@@ -105,41 +107,16 @@ class ChangeDataScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20, bottom: 10),
-                          child: Text("Enviar comprovante de residência (PDF)"),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 20, top: 10),
-                          child: SizedBox(
-                            width: 71,
-                            height: 60,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                // -------------- FUNÇÃO PARA LEVAR PARA OUTRA PÁGINA ---------
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.white,
-                                  foregroundColor: Colors.black,
-                                  textStyle: const TextStyle(
-                                      fontWeight: FontWeight.bold),
-                                  shape: RoundedRectangleBorder(
-                                      side: BorderSide(
-                                          color: Color.fromRGBO(33, 71, 22, 1)),
-                                      borderRadius: BorderRadius.circular(8))),
-                              child: Text("+"),
-                            ),
-                          ),
-                        ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(
                               padding:
                                   const EdgeInsets.only(top: 10, bottom: 10),
-                              child: Text("Número de celular 1"),
+                              child: Text("Número de celular"),
                             ),
                             TextFormField(
+                              inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(11)],
                               controller: _phoneController,
                               decoration: const InputDecoration(
                                 enabledBorder: OutlineInputBorder(
