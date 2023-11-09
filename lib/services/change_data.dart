@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -47,8 +49,9 @@ Future<void> changeDataAuth(context, String token, String newAddress, String new
     );
 
     Navigator.pop(context); // Fecha o diálogo de carregamento
-
+      final Map<String, dynamic> responseBody = json.decode(response.body);
     if (response.statusCode == 201) {
+      
       // Alteração bem-sucedida
       print('Solicitação POST bem-sucedida');
       print('Resposta: ${response.body}');
@@ -70,7 +73,8 @@ Future<void> changeDataAuth(context, String token, String newAddress, String new
           );
         },
       );
-    } else {
+    } else if (responseBody.containsKey('msg') == true) {
+      
       // Tratamento para outros erros
       print('Falha na solicitação POST');
       print('Código de status: ${response.statusCode}');
@@ -79,7 +83,27 @@ Future<void> changeDataAuth(context, String token, String newAddress, String new
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            content: Text("Falha na alteração. Tente novamente mais tarde."),
+            content: Padding(
+              padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.03),
+              child: Text("Já existe uma petição em andamento, aguarde o resultado para fazer uma nova solicitação!", textAlign: TextAlign.center),
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("OK"),
+              )
+            ],
+          );
+        },
+      );
+    } else if (responseBody.containsKey('msg') != true){
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: Text("Ops, algo deu errado!"),
             actions: <Widget>[
               TextButton(
                 onPressed: () {

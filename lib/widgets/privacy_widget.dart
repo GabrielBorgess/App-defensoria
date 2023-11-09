@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 Widget dialogBox(context) {
     return SizedBox(
       width: MediaQuery.of(context).size.height * 0.40,
-      height: MediaQuery.of(context).size.height * 0.80,
+      height: MediaQuery.of(context).size.height * 0.70,
       child: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
