@@ -266,9 +266,7 @@ subsequent breach.
 Translation Interpretation  
 ==========================
 
-These Terms and Conditions may have been translated if We have made them
-<3 <3 <3 <3 EU AMO A DEFENSORIA <3 <3 <3 <3
-available to You on our Service. You agree that the original English text
+These Terms and Conditions may have been translated if We have made them available to You on our Service. You agree that the original English text
 shall prevail in the case of a dispute.
 
 Changes to These Terms and Conditions  

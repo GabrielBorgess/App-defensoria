@@ -7,6 +7,9 @@ class AuthState extends ChangeNotifier {
   String peticaoData;
   String peticaoStatus;
   String peticaoTipo;
+  String logradouro;
+  String complemento;
+  String bairro;
 
   AuthState()
       : authToken = "",
@@ -14,7 +17,11 @@ class AuthState extends ChangeNotifier {
         userName = "",
         peticaoData = "",
         peticaoStatus = "",
-        peticaoTipo = "";
+        peticaoTipo = "",
+        logradouro = "",
+        complemento = "",
+        bairro = "";
+        
 
   void setAuthToken(String token) {
     authToken = token;
