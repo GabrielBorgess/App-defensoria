@@ -31,9 +31,9 @@ Widget dialogBox(context) {
                         right: 18,
                       ),
                       child: Text(
-                        "Termos de Serviços",
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.left,
+                        "Termos de Serviços\n & \nPolítica de Privacidade",
+                        overflow: TextOverflow.visible,
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 18,
@@ -48,250 +48,61 @@ Widget dialogBox(context) {
                       child: Text(
                         """====================
 
-Last updated: November 06, 2023
+Última Atualização: 22 de Novembro, 2023
 
-Please read these terms and conditions carefully before using Our Service.
+Por favor, leia os termos e as condições com atenção antes de usar nosso serviço.
 
-Interpretation and Definitions  
-==============================
+Aviso de privacidade e proteção de dados pessoais
+A Defensoria Pública do Distrito Federal - DPDF, em observância à Lei nº 13.709, de 14 de agosto de 2018 (Lei Geral de Proteção de Dados Pessoais – LGPD), e ao Decreto nº 42.036/2021, de 27 de abril de 2021, instituiu o Aviso de Privacidade e de Proteção de Dados Pessoais, instrumento basilar para a implementação do Programa de Privacidade e Proteção de Dados Pessoais desta DPDF a ser elaborado em consonância com a missão, a visão e os valores institucionais. O Aviso e as ações previstas no supracitado Programa fundamentam-se no art. 5º da LGPD, bem como nos conceitos e regramentos previstos nas normas voltadas à segurança da informação, à governança, à gestão de riscos e à gestão documental, entre outras afins.
 
-Interpretation  
---------------
+    • Princípios
+São princípios do Aviso de Privacidade e de Proteção de Dados Pessoais da DPDF:
+    1. Resiliência: os controles de segurança devem ser projetados para que possam resistir ou se recuperar dos efeitos de um incidente ou desastre;
+    2. Simplicidade: os controles de segurança deverão ser simples e objetivos, visto que a complexidade aumenta a chance de equívocos;
+    3. Clareza: as informações precisam ser claras e objetivas para que possam ser aplicadas efetivamente em todos os níveis da SEEDF;
+    4. Confidencialidade;
+    5. Integridade;
+    6. Autenticidade, e
+    7. Disponibilidade das informações.
 
-The words of which the initial letter is capitalized have meanings defined
-under the following conditions. The following definitions shall have the same
-meaning regardless of whether they appear in singular or in plural.
+    • Objetivos
+São objetivos que visam à privacidade e à proteção de dados pessoais na DPDF:
+    1. Proteger as informações coletadas e tratadas pela DPDF, de forma a garantir a confidencialidade, a autenticidade e a integridade;
+    2. Promover e desenvolver a cultura da segurança dos dados pessoais em todos os níveis da instituição;
+    3. Possibilitar a criação de controles e promover a otimização dos recursos de tecnologia da informação e documentação;
+    4. Especificar a forma pela qual os dados dos titulares são coletados e tratados;
+    5. Explicitar os direitos dos titulares a fim de garantir a transparência dos procedimentos adotados no tratamento de dados pessoais neste Ente.
 
-Definitions  
------------
+    • Legislação correlata
+O Aviso de Privacidade e de Proteção de Dados Pessoais da DPDF baseia-se na seguinte legislação:
+    1. Lei nº 13.709/2018 - Lei Geral de Proteção de Dados Pessoais/ LGPD, que dispõe sobre o tratamento de dados pessoais, inclusive nos meios digitais, por pessoa natural ou por pessoa jurídica de direito público ou privado, com o objetivo de proteger os direitos fundamentais de liberdade e de privacidade e o livre desenvolvimento da personalidade da pessoa natural;
+    2. Decreto nº 42.036/2021 - dispõe sobre a aplicação da Lei Federal nº 13.709, de 14 de agosto de 2018 - Lei Geral de Proteção de Dados Pessoais - LGPD, no âmbito da Administração Pública Direta e Indireta do Distrito Federal;
+    3. Lei Federal nº 12.527/2011 - Lei de Acesso à Informação, que regula o acesso a informações previsto no inciso XXXIII do art. 5º, no inciso II do § 3º do art. 37 e no § 2º do art. 216 da Constituição Federal;
+    4. Lei nº 4.990/2012, que regula o acesso a informações no Distrito Federal previsto no art. 5º, XXXIII, no art. 37, § 3º, II, e no art. 216, §2º da Constituição Federal e nos termos do art. 45, da Lei Federal nº 12.527/2011,
+    5. Normas ABNT NBR ISO/IEC 27001:2013, 27002:2013, 27005:2011 e 31000:2018;
+    6. Normas vigentes na Administração Pública do Distrito Federal relacionadas à governança, à gestão de riscos, à gestão documental e à segurança da informação.
 
-For the purposes of these Terms and Conditions:
+    • Direitos dos titulares de dados pessoais
+São direitos dos titulares de dados pessoais:
+    1. confirmação da existência de tratamento;
+    2. acesso aos seus dados;
+    3. correção de dados incompletos, inexatos ou desatualizados;
+    4. anonimização, bloqueio ou eliminação de dados desnecessários, excessivos ou tratados em desconformidade com o disposto na LGPD;
+    5. portabilidade dos dados a outro fornecedor de serviço ou produto, mediante requisição expressa, de acordo com a regulamentação da autoridade nacional, observados os segredos comercial e industrial;
+    6. eliminação dos dados pessoais tratados com o consentimento do titular, exceto nas hipóteses previstas no art. 16 da LGPD;
+    7. informação das entidades públicas e privadas com as quais o controlador realizou uso compartilhado de dados;
+    8. informação sobre a possibilidade de não fornecer consentimento e sobre as consequências da negativa;
+    9. revogação do consentimento, nos termos do § 5º do art. 8º da LGPD.
 
-  * Application means the software program provided by the Company downloaded
-    by You on any electronic device, named APP DPDF
-
-  * Application Store means the digital distribution service operated and
-    developed by Apple Inc. (Apple App Store) or Google Inc. (Google Play
-    Store) in which the Application has been downloaded.
-
-  * Affiliate means an entity that controls, is controlled by or is under
-    common control with a party, where "control" means ownership of 50% or
-    more of the shares, equity interest or other securities entitled to vote
-    for election of directors or other managing authority.
-
-  * Country refers to: Brazil
-
-  * Company (referred to as either "the Company", "We", "Us" or "Our" in this
-    Agreement) refers to Defensoria wadawdaw, dwadawdawda.
-
-  * Device means any device that can access the Service such as a computer, a
-    cellphone or a digital tablet.
-
-  * Service refers to the Application.
-
-  * Terms and Conditions (also referred as "Terms") mean these Terms and
-    Conditions that form the entire agreement between You and the Company
-    regarding the use of the Service. This Terms and Conditions agreement has
-    been created with the help of the [Terms and Conditions
-    Generator](https://www.termsfeed.com/terms-conditions-generator/).
-
-  * Third-party Social Media Service means any services or content (including
-    data, information, products or services) provided by a third-party that
-    may be displayed, included or made available by the Service.
-
-  * You means the individual accessing or using the Service, or the company,
-    or other legal entity on behalf of which such individual is accessing or
-    using the Service, as applicable.
-
-
-Acknowledgment  
-==============
-
-These are the Terms and Conditions governing the use of this Service and the
-agreement that operates between You and the Company. These Terms and
-Conditions set out the rights and obligations of all users regarding the use
-of the Service.
-
-Your access to and use of the Service is conditioned on Your acceptance of and
-compliance with these Terms and Conditions. These Terms and Conditions apply
-to all visitors, users and others who access or use the Service.
-
-By accessing or using the Service You agree to be bound by these Terms and
-Conditions. If You disagree with any part of these Terms and Conditions then
-You may not access the Service.
-
-You represent that you are over the age of 18. The Company does not permit
-those under 18 to use the Service.
-
-Your access to and use of the Service is also conditioned on Your acceptance
-of and compliance with the Privacy Policy of the Company. Our Privacy Policy
-describes Our policies and procedures on the collection, use and disclosure of
-Your personal information when You use the Application or the Website and
-tells You about Your privacy rights and how the law protects You. Please read
-Our Privacy Policy carefully before using Our Service.
-
-Links to Other Websites  
-=======================
-
-Our Service may contain links to third-party web sites or services that are
-not owned or controlled by the Company.
-
-The Company has no control over, and assumes no responsibility for, the
-content, privacy policies, or practices of any third party web sites or
-services. You further acknowledge and agree that the Company shall not be
-responsible or liable, directly or indirectly, for any damage or loss caused
-or alleged to be caused by or in connection with the use of or reliance on any
-such content, goods or services available on or through any such web sites or
-services.
-
-We strongly advise You to read the terms and conditions and privacy policies
-of any third-party web sites or services that You visit.
-
-Termination  
-===========
-
-We may terminate or suspend Your access immediately, without prior notice or
-liability, for any reason whatsoever, including without limitation if You
-breach these Terms and Conditions.
-
-Upon termination, Your right to use the Service will cease immediately.
-
-Limitation of Liability  
-=======================
-
-Notwithstanding any damages that You might incur, the entire liability of the
-Company and any of its suppliers under any provision of this Terms and Your
-exclusive remedy for all of the foregoing shall be limited to the amount
-actually paid by You through the Service or 100 USD if You haven't purchased
-anything through the Service.
-
-To the maximum extent permitted by applicable law, in no event shall the
-Company or its suppliers be liable for any special, incidental, indirect, or
-consequential damages whatsoever (including, but not limited to, damages for
-loss of profits, loss of data or other information, for business interruption,
-for personal injury, loss of privacy arising out of or in any way related to
-the use of or inability to use the Service, third-party software and/or third-
-party hardware used with the Service, or otherwise in connection with any
-provision of this Terms), even if the Company or any supplier has been advised
-of the possibility of such damages and even if the remedy fails of its
-essential purpose.
-
-Some states do not allow the exclusion of implied warranties or limitation of
-liability for incidental or consequential damages, which means that some of
-the above limitations may not apply. In these states, each party's liability
-will be limited to the greatest extent permitted by law.
-
-"AS IS" and "AS AVAILABLE" Disclaimer  
-==========
-
-The Service is provided to You "AS IS" and "AS AVAILABLE" and with all faults
-and defects without warranty of any kind. To the maximum extent permitted
-under applicable law, the Company, on its own behalf and on behalf of its
-Affiliates and its and their respective licensors and service providers,
-expressly disclaims all warranties, whether express, implied, statutory or
-otherwise, with respect to the Service, including all implied warranties of
-merchantability, fitness for a particular purpose, title and non-infringement,
-and warranties that may arise out of course of dealing, course of performance,
-usage or trade practice. Without limitation to the foregoing, the Company
-provides no warranty or undertaking, and makes no representation of any kind
-that the Service will meet Your requirements, achieve any intended results, be
-compatible or work with any other software, applications, systems or services,
-operate without interruption, meet any performance or reliability standards or
-be error free or that any errors or defects can or will be corrected.
-
-Without limiting the foregoing, neither the Company nor any of the company's
-provider makes any representation or warranty of any kind, express or implied:
-(i) as to the operation or availability of the Service, or the information,
-content, and materials or products included thereon; (ii) that the Service
-will be uninterrupted or error-free; (iii) as to the accuracy, reliability, or
-currency of any information or content provided through the Service; or (iv)
-that the Service, its servers, the content, or e-mails sent from or on behalf
-of the Company are free of viruses, scripts, trojan horses, worms, malware,
-timebombs or other harmful components.
-
-Some jurisdictions do not allow the exclusion of certain types of warranties
-or limitations on applicable statutory rights of a consumer, so some or all of
-the above exclusions and limitations may not apply to You. But in such a case
-the exclusions and limitations set forth in this section shall be applied to
-the greatest extent enforceable under applicable law.
-
-Governing Law  
-=============
-
-The laws of the Country, excluding its conflicts of law rules, shall govern
-this Terms and Your use of the Service. Your use of the Application may also
-be subject to other local, state, national, or international laws.
-
-Disputes Resolution  
-===================
-
-If You have any concern or dispute about the Service, You agree to first try
-to resolve the dispute informally by contacting the Company.
-
-For European Union (EU) Users  
-=============================
-
-If You are a European Union consumer, you will benefit from any mandatory
-provisions of the law of the country in which you are resident in.
-
-United States Legal Compliance  
-==============================
-
-You represent and warrant that (i) You are not located in a country that is
-subject to the United States government embargo, or that has been designated
-by the United States government as a "terrorist supporting" country, and (ii)
-You are not listed on any United States government list of prohibited or
-restricted parties.
-
-Severability and Waiver  
-=======================
-
-Severability  
-------------
-
-If any provision of these Terms is held to be unenforceable or invalid, such
-provision will be changed and interpreted to accomplish the objectives of such
-provision to the greatest extent possible under applicable law and the
-remaining provisions will continue in full force and effect.
-
-Waiver  
-------
-
-Except as provided herein, the failure to exercise a right or to require
-performance of an obligation under these Terms shall not effect a party's
-ability to exercise such right or require such performance at any time
-thereafter nor shall the waiver of a breach constitute a waiver of any
-subsequent breach.
-
-Translation Interpretation  
-==========================
-
-These Terms and Conditions may have been translated if We have made them available to You on our Service. You agree that the original English text
-shall prevail in the case of a dispute.
-
-Changes to These Terms and Conditions  
-=====================================
-
-We reserve the right, at Our sole discretion, to modify or replace these Terms
-at any time. If a revision is material We will make reasonable efforts to
-provide at least 30 days' notice prior to any new terms taking effect. What
-constitutes a material change will be determined at Our sole discretion.
-
-By continuing to access or use Our Service after those revisions become
-effective, You agree to be bound by the revised terms. If You do not agree to
-the new terms, in whole or in part, please stop using the website and the
-Service.
-
-Contact Us  
-==========
-
-If you have any questions about these Terms and Conditions, You can contact
-us:
-
-  * By email: frontdpdf@gmail.com
-
-  * By visiting this page on our website: <https://www.defensoria.df.gov.br/>
-
+    • Coleta de dados pessoais
+Os dados pessoais dos titulares e, quando for o caso, de seus responsáveis são coletados a partir de cadastros específicos nas diversas ferramentas e nos sistemas em uso na DPDF.  Tais cadastros possuem objetivos próprios de tratamento de dados para, entre outros fins, cumprimento de obrigação legal ou regulatória pelo controlador, execução de políticas públicas e de contratos administrativos.
+A DPDF é responsável por aplicar as medidas técnicas, de segurança tecnológica e de processos para assegurar a devida proteção dos dados coletados, tratados ou compartilhados.
+    • Compartilhamento de dados pessoais
+Os dados pessoais poderão ser compartilhados com os operadores contratados pela DPDF, o Ministério Público, as autoridades judiciais, administrativas ou governamentais competentes, os órgãos de controle e fiscalização, além de outras hipóteses previstas na LGPD, sempre que houver determinação legal, requisição ou ordem judicial.
+    • Revisão do Aviso de Privacidade e de Proteção de Dados Pessoais da DPDF
+A revisão deste Aviso de Privacidade e de Proteção de Dados Pessoais deve ser realizada em ciclos não superiores a 1 (um) ano e abranger os processos de trabalho das áreas técnicas da DPDF.
+    • Utilização de cookies
+Os cookies utilizados sítio eletrônico e nos aplicativos em uso pela DPDF são cookies estritamente necessários, como os de funcionalidade e segurança.
 """,
                         textAlign: TextAlign.justify,
                         style: TextStyle(

@@ -172,7 +172,7 @@ Future<List<PeticaoData>> getPeticoes() async {
       tipo: peticaoTipoList[i],
       data: peticaoDataList[i],
     );
-    peticoes.add(peticao);
+    peticoes.insert(0,peticao);
   }
 
   return peticoes;

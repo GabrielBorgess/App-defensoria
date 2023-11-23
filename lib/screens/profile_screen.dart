@@ -32,7 +32,7 @@ class ProfilePage extends StatelessWidget {
                             if (snapshot.hasData) {
                               String userName = snapshot.data!;
                               return Text(
-                                "Bem Vindo(a) $userName",
+                                "Seja Bem-Vindo(a) $userName",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: MediaQuery.of(context).size.height * 0.03,

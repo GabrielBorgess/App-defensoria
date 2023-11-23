@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/change_data.dart';
 import 'package:file_picker/file_picker.dart';
+import 'dart:io';
+import 'package:dio/dio.dart';
 
 final TextEditingController _adressController = TextEditingController();
 final TextEditingController _phoneController = TextEditingController();
@@ -88,7 +90,7 @@ class _ChangeDataScreenState extends State<ChangeDataScreen> {
   //     }
   //   });
   // }
-   PlatformFile? objFile;
+PlatformFile? objFile;
 
 void chooseFileUsingFilePicker() async {
   var result = await FilePicker.platform.pickFiles(
@@ -103,31 +105,38 @@ void chooseFileUsingFilePicker() async {
 }
 
 
-  void uploadSelectedFile() async {
-    //---Create http package multipart request object
-    final request = http.MultipartRequest(
-      "POST",
-      Uri.parse("Your API URL"),
-    );
-    //-----add other fields if needed
-    request.fields["id"] = "abc";
+ Future<void> uploadSelectedFile() async {
+  try {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final authToken = prefs.getString('auth_token') ?? "";
 
-    //-----add selected file with request
-request.files.add(http.MultipartFile(
-    "Your parameter name on server side", objFile!.readStream ?? Stream.empty(), objFile!.size,
-    filename: objFile!.name));
+    Dio dio = Dio();
+    
+    if (objFile != null) {
+      FormData formData = FormData.fromMap({
+        "arquivo": await MultipartFile.fromFile(objFile!.path ?? ""),
+      });
 
+      Response response = await dio.post(
+        "http://172.88.0.224:3000/assistido/alterarDados",
+        data: formData,
+        options: Options(
+          headers: {
+            "Authorization": "Bearer $authToken",
+            "Content-Type": "multipart/form-data",
+          },
+        ),
+      );
 
-    //-------Send request
-    var resp = await request.send();
-
-    //------Read response
-    String result = await resp.stream.bytesToString();
-
-    //-------Your response
-    print(result);
+      print("Resposta: ${response.data}");
+      print("teste");
+    } else {
+      print("Nenhum arquivo selecionado!");
+    }
+  } catch (e) {
+    print("Erro ao enviar arquivo: $e");
   }
-
+}
  @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
