@@ -1,12 +1,13 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-Future<void> changeDataAuth(context, String token, String newAddress, String newPhone) async {
+Future<void> changeDataAuth(context, String token, String newAddress, String newPhone, Uint8List? fileBytes) async {
   String url = 'http://172.88.0.224:3000/assistido/alterarDados';
 
-  if (newAddress.isEmpty && newPhone.isEmpty) {
+  if (newAddress.isEmpty && newPhone.isEmpty && fileBytes == null) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -38,20 +39,25 @@ Future<void> changeDataAuth(context, String token, String newAddress, String new
           ),
         );
       });
-      
-    // Realiza a solicitação POST
-    http.Response response = await http.post(
-      Uri.parse(url),
-      headers: {
-        'Authorization': 'Bearer $token',
-      },
-      body: {"novoEndereco": newAddress, "novoTelefone": newPhone},
-    );
+
+    // Crie uma solicitação Multipart
+var request = http.MultipartRequest('POST', Uri.parse(url))
+  ..headers['Authorization'] = 'Bearer $token'
+  ..fields['novoEndereco'] = newAddress
+  ..fields['novoTelefone'] = newPhone;
+
+// Adicione o arquivo ao corpo da solicitação POST
+if (fileBytes != null) {
+  request.files.add(http.MultipartFile.fromBytes('arquivo', fileBytes, filename: 'documento.pdf'));
+}
+
+    // Envie a solicitação POST
+    http.Response response = await http.Response.fromStream(await request.send());
 
     Navigator.pop(context); // Fecha o diálogo de carregamento
-      final Map<String, dynamic> responseBody = json.decode(response.body);
+    final Map<String, dynamic> responseBody = json.decode(response.body);
+
     if (response.statusCode == 201) {
-      
       // Alteração bem-sucedida
       print('Solicitação POST bem-sucedida');
       print('Resposta: ${response.body}');
@@ -74,7 +80,6 @@ Future<void> changeDataAuth(context, String token, String newAddress, String new
         },
       );
     } else if (responseBody.containsKey('msg') == true) {
-      
       // Tratamento para outros erros
       print('Falha na solicitação POST');
       print('Código de status: ${response.statusCode}');
@@ -118,4 +123,5 @@ Future<void> changeDataAuth(context, String token, String newAddress, String new
     }
   }
 }
+
   

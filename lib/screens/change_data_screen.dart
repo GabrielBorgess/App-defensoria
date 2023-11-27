@@ -6,7 +6,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../services/change_data.dart';
 import 'package:file_picker/file_picker.dart';
 import 'dart:io';
-import 'package:dio/dio.dart';
 
 final TextEditingController _adressController = TextEditingController();
 final TextEditingController _phoneController = TextEditingController();
@@ -23,7 +22,7 @@ Future<Map<String, String>> getCep(context, String cep) async {
     Uri.parse(url),
   );
 
-if (response.statusCode == 200) {
+  if (response.statusCode == 200) {
     final Map<String, dynamic> responseBody = json.decode(response.body);
     print(responseBody);
 
@@ -31,10 +30,10 @@ if (response.statusCode == 200) {
     String complemento = responseBody['complemento'];
     String bairroText = responseBody['bairro'];
 
-     SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('logradouro', logradouro);
-      await prefs.setString('complemento', complemento);
-      await prefs.setString('bairro', bairroText);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('logradouro', logradouro);
+    await prefs.setString('complemento', complemento);
+    await prefs.setString('bairro', bairroText);
 
     _adressController.text = logradouro;
     _bairroController.text = bairroText;
@@ -43,15 +42,16 @@ if (response.statusCode == 200) {
       'logradouro': logradouro,
       'complemento': complemento,
       'bairro': bairroText,
-    };      
-    } else {
-      return {
+    };
+  } else {
+    return {
       'logradouro': '',
       'complemento': '',
       'bairro': '',
     };
-    
-  }}
+  }
+}
+
 // ignore: must_be_immutable
 class ChangeDataScreen extends StatefulWidget {
   ChangeDataScreen({Key? key}) : super(key: key);
@@ -62,82 +62,65 @@ class ChangeDataScreen extends StatefulWidget {
 
 class _ChangeDataScreenState extends State<ChangeDataScreen> {
   bool cepFunctionCalled = false;
-
   String bairroText = '';
 
-  //  List<PlatformFile>? _paths;
+  PlatformFile? objFile;
+  Uint8List? fileBytes;
 
-  // void pickFiles() async {
-  //   try {
-  //     _paths = (await FilePicker.platform.pickFiles(
-  //       type: FileType.custom,
-  //       allowMultiple: false,
-  //       onFileLoading: (FilePickerStatus status) => print(status),
-  //       allowedExtensions: ['png', 'jpg', 'jpeg', 'heic', 'pdf'],
-  //     ))
-  //         ?.files;
-  //   } on PlatformException catch (e) {
-  //     log('Unsupported operation$e');
-  //   } catch (e) {
-  //     log(e.toString());
-  //   }
-  //   setState(() {
-  //     if (_paths != null) {
-  //       if (_paths != null) {
-  //         //passing file bytes and file name for API call
-  //         ApiClient.uploadFile(_paths!.first.bytes!, _paths!.first.name);
-  //       }
-  //     }
-  //   });
-  // }
-PlatformFile? objFile;
+  void chooseFileUsingFilePicker() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf'],
+      allowMultiple: true,
+      withReadStream: true,
+    );
 
-void chooseFileUsingFilePicker() async {
-  var result = await FilePicker.platform.pickFiles(
-    withReadStream: true,
-  );
-  if (result != null) {
-    setState(() {
-      objFile = result.files.single;
-      fileName = objFile!.name;
-    });
+    if (result != null) {
+      PlatformFile file = result.files.single;
+
+      // Verificar se a extensão do arquivo é 'pdf'
+      if (file.extension?.toLowerCase() == 'pdf') {
+        final List<int> bytes = await File(file.path!).readAsBytes();
+        setState(() {
+          objFile = file;
+          fileBytes = Uint8List.fromList(bytes);
+          fileName = objFile!.name;
+        });
+      } else {
+        // Exibir mensagem de erro
+        // ignore: use_build_context_synchronously
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              content: Text("Por favor, selecionar tipo de arquivo PDF."),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text("OK"),
+                ),
+              ],
+            );
+          },
+        );
+      }
+    }
   }
-}
 
-
- Future<void> uploadSelectedFile() async {
-  try {
+  void changeData(context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final authToken = prefs.getString('auth_token') ?? "";
 
-    Dio dio = Dio();
-    
-    if (objFile != null) {
-      FormData formData = FormData.fromMap({
-        "arquivo": await MultipartFile.fromFile(objFile!.path ?? ""),
-      });
+    final String newAddress =
+        ('${_adressController.text.trim()} ${_bairroController.text.trim()} ${_numeroController.text.trim()} CEP: ${_cepController.text.trim()}');
+    final String newPhone = _phoneController.text.trim();
 
-      Response response = await dio.post(
-        "http://172.88.0.224:3000/assistido/alterarDados",
-        data: formData,
-        options: Options(
-          headers: {
-            "Authorization": "Bearer $authToken",
-            "Content-Type": "multipart/form-data",
-          },
-        ),
-      );
-
-      print("Resposta: ${response.data}");
-      print("teste");
-    } else {
-      print("Nenhum arquivo selecionado!");
-    }
-  } catch (e) {
-    print("Erro ao enviar arquivo: $e");
+    changeDataAuth(context, authToken, newAddress, newPhone, fileBytes);
   }
-}
- @override
+
+  @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _cepController.addListener(() {
@@ -252,43 +235,42 @@ void chooseFileUsingFilePicker() async {
                       ),
                     ],
                   ),
-                SizedBox(
-  width: double.infinity,
-  child: Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Padding(
-        padding: const EdgeInsets.only(top: 20, bottom: 10),
-        child: Text("Enviar comprovante de residência (PDF)"),
-      ),
-      Padding(
-        padding: const EdgeInsets.only(bottom: 20, top: 10),
-        child: SizedBox(
-          width: 400,
-          height: 60,
-          child: ElevatedButton(
-            onPressed: () => chooseFileUsingFilePicker(),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
-              foregroundColor: Colors.black,
-              textStyle: const TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-              shape: RoundedRectangleBorder(
-                side: BorderSide(
-                  color: Color.fromRGBO(33, 71, 22, 1),
-                ),
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-            child: Text(fileName.isNotEmpty ? fileName : "+"),
-          ),
-        ),
-      ),
-    ],
-  ),
-),
-
+                  SizedBox(
+                    width: double.infinity,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 20, bottom: 10),
+                          child: Text("Enviar comprovante de residência (PDF)"),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 20, top: 10),
+                          child: SizedBox(
+                            width: 400,
+                            height: 60,
+                            child: ElevatedButton(
+                              onPressed: () => chooseFileUsingFilePicker(),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white,
+                                foregroundColor: Colors.black,
+                                textStyle: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  side: BorderSide(
+                                    color: Color.fromRGBO(33, 71, 22, 1),
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              child: Text(fileName.isNotEmpty ? fileName : "+"),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -317,7 +299,7 @@ void chooseFileUsingFilePicker() async {
                       width: double.infinity,
                       height: 46,
                       child: ElevatedButton(
-                        onPressed: () => {changeData(context), uploadSelectedFile()},
+                        onPressed: () => {changeData(context)},
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color.fromRGBO(33, 71, 22, 1),
                           shape: RoundedRectangleBorder(
@@ -337,17 +319,3 @@ void chooseFileUsingFilePicker() async {
     );
   }
 }
-
-      
-void changeData(context) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  final authToken = prefs.getString('auth_token') ?? "";
-
-  final String newAdress = ('${_adressController.text.trim()} ${_bairroController.text.trim()} ${_numeroController.text.trim()} CEP: ${_cepController.text.trim()}'
-  );
-  final String newPhone = _phoneController.text.trim();
-
-  changeDataAuth(context, authToken, newAdress, newPhone);
-
-}
-
