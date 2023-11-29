@@ -12,7 +12,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthState()),
-        // Outros Providers, se houver
+        // Outros provedores podem ser adicionados aqui, se necessário.
       ],
       child: MyApp(),
     ),
@@ -21,12 +21,16 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
+    // Widget principal da aplicação
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Seu App',
-      color: Color.fromARGB(236, 224, 224, 224), // Define a cor principal aqui
+      color: Color.fromARGB(236, 224, 224, 224),
+
+      // Define a rota inicial e as rotas nomeadas
       home: LoginScreen(),
       routes: {
         '/profile': (context) => ProfilePage(),
