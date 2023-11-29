@@ -132,7 +132,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Container(
                   alignment: Alignment.topLeft,
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 80, left: 31, right: 31),
+                    padding: EdgeInsets.only(top: MediaQuery.of(context).size.width * 0.12, left: 31, right: 31),
                     child: Text.rich(
                       textAlign: TextAlign.center,
                       TextSpan(

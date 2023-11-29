@@ -41,100 +41,113 @@ class SolicitationsPage extends StatelessWidget {
                       ),
                     ],
                   ),
-                  FutureBuilder<List<PeticaoData>?>(
-                  future: getPeticoes(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
-                    } else if (snapshot.hasError) {
-                      return Text('Erro: ${snapshot.error}');
-                    } else if (!snapshot.hasData || snapshot.data == null || snapshot.data!.isEmpty) {
-                      return Text("Nenhuma petição encontrada");
-                    } else {
-                      List<PeticaoData> peticoes = snapshot.data!;
-                        return Column(
-                          children: peticoes.asMap().entries.map((entry) {
-                            PeticaoData peticao = entry.value;
-                            String peticaoStatus = peticao.status;
-                            return Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 0),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            peticao.tipo,
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize:
-                                                  MediaQuery.of(context).size.height * 0.02,
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(top: 5),
-                                            child: Text(
-                                              peticao.data,
+                  Center(
+                    child: FutureBuilder<List<PeticaoData>?>(
+                    future: getPeticoes(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return Text('Erro: ${snapshot.error}');
+                      } else if (!snapshot.hasData || snapshot.data == null || snapshot.data!.isEmpty) {
+                        return Text("Nenhuma petição encontrada");
+                      } else {
+                        List<PeticaoData> peticoes = snapshot.data!;
+                          return Column(
+                            children: peticoes.asMap().entries.map((entry) {
+                              PeticaoData peticao = entry.value;
+                              String peticaoStatus = peticao.status;
+                              return Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 0),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              peticao.tipo,
                                               style: TextStyle(
-                                                color: Colors.black54,
-                                                fontWeight: FontWeight.w400,
-                                                fontSize: MediaQuery.of(context).size.height * 0.018,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize:
+                                                    MediaQuery.of(context).size.height * 0.02,
                                               ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            color: (peticaoStatus == '0'
+                                            Padding(
+                                            padding: const EdgeInsets.only(top: 5),
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(top: 8.0),
+                                              child: Row(
+                                                crossAxisAlignment: CrossAxisAlignment.center,          
+                                                children: [
+                          Text(
+                            peticao.data,
+                            style: TextStyle(
+                              color: Colors.black54,
+                              fontWeight: FontWeight.w400,
+                              fontSize: MediaQuery.of(context).size.height * 0.018,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: MediaQuery.of(context).size.height * 0.15),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: (peticaoStatus == '0'
                                                 ? Colors.yellow[800]
                                                 : peticaoStatus == '1'
-                                                    ? Colors.green[800]
-                                                    : Colors.red[800]),
-                                            borderRadius: BorderRadius.all(Radius.circular(8)),
-                                          ),
-                                          width: MediaQuery.of(context).size.width * 0.2,
-                                          height: MediaQuery.of(context).size.height * 0.03,
-                                          child: Center(
-                                            child: Text(
-                                              peticaoStatus == '0'
-                                                  ? 'em Análise'
-                                                  : (peticaoStatus == '1' ? 'Aceito' : 'Rejeitado'),
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.w400,
-                                                fontSize: MediaQuery.of(context).size.height * 0.017,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 12, bottom: 20),
-                                  child: SizedBox(
-                                    width: double.infinity,
-                                    height: 1.5,
-                                    child: const DecoratedBox(
-                                      decoration: BoxDecoration(color: Colors.black12),
-                                    ),
+                            ? Colors.green[800]
+                            : Colors.red[800]),
+                                borderRadius: BorderRadius.all(Radius.circular(8)),
+                              ),
+                              width: MediaQuery.of(context).size.width * 0.2,
+                              height: MediaQuery.of(context).size.height * 0.03,
+                              child: Center(
+                                child: Text(
+                                  peticaoStatus == '0' ? 'em Análise' : (peticaoStatus == '1' ? 'Aceito' : 'Rejeitado'),
+                                  style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: MediaQuery.of(context).size.height * 0.017,
                                   ),
                                 ),
-                              ],
-                            );
-                          }).toList(),
-                        );
-                      }
-                    },
+                              ),
+                            ),
+                          ),
+                                                ],
+                                              ),
+                                            ),
+                                            ),
+                                            
+                                          ],
+                                        ),
+                                      ),
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 12, bottom: 20),
+                                    child: SizedBox(
+                                      width: double.infinity,
+                                      height: 1.5,
+                                      child: const DecoratedBox(
+                                        decoration: BoxDecoration(color: Colors.black12),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }).toList(),
+                          );
+                        }
+                      },
+                    ),
                   ),
                 ],
               ),
@@ -159,7 +172,7 @@ Future<List<PeticaoData>> getPeticoes() async {
       tipo: peticaoTipoList[i],
       data: peticaoDataList[i],
     );
-    peticoes.add(peticao);
+    peticoes.insert(0,peticao);
   }
 
   return peticoes;

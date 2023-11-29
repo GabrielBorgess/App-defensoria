@@ -1,10 +1,13 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-Future<void> changeDataAuth(context, String token, String newAddress, String newPhone) async {
+Future<void> changeDataAuth(context, String token, String newAddress, String newPhone, Uint8List? fileBytes) async {
   String url = 'http://172.88.0.224:3000/assistido/alterarDados';
 
-  if (newAddress.isEmpty && newPhone.isEmpty) {
+  if (newAddress.isEmpty && newPhone.isEmpty && fileBytes == null) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -36,17 +39,23 @@ Future<void> changeDataAuth(context, String token, String newAddress, String new
           ),
         );
       });
-      
-    // Realiza a solicitação POST
-    http.Response response = await http.post(
-      Uri.parse(url),
-      headers: {
-        'Authorization': 'Bearer $token',
-      },
-      body: {"novoEndereco": newAddress, "novoTelefone": newPhone},
-    );
+
+    // Crie uma solicitação Multipart
+var request = http.MultipartRequest('POST', Uri.parse(url))
+  ..headers['Authorization'] = 'Bearer $token'
+  ..fields['novoEndereco'] = newAddress
+  ..fields['novoTelefone'] = newPhone;
+
+// Adicione o arquivo ao corpo da solicitação POST
+if (fileBytes != null) {
+  request.files.add(http.MultipartFile.fromBytes('arquivo', fileBytes, filename: 'documento.pdf'));
+}
+
+    // Envie a solicitação POST
+    http.Response response = await http.Response.fromStream(await request.send());
 
     Navigator.pop(context); // Fecha o diálogo de carregamento
+    final Map<String, dynamic> responseBody = json.decode(response.body);
 
     if (response.statusCode == 201) {
       // Alteração bem-sucedida
@@ -70,7 +79,7 @@ Future<void> changeDataAuth(context, String token, String newAddress, String new
           );
         },
       );
-    } else {
+    } else if (responseBody.containsKey('msg') == true) {
       // Tratamento para outros erros
       print('Falha na solicitação POST');
       print('Código de status: ${response.statusCode}');
@@ -79,7 +88,27 @@ Future<void> changeDataAuth(context, String token, String newAddress, String new
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            content: Text("Falha na alteração. Tente novamente mais tarde."),
+            content: Padding(
+              padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.03),
+              child: Text("Já existe uma petição em andamento, aguarde o resultado para fazer uma nova solicitação!", textAlign: TextAlign.center),
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("OK"),
+              )
+            ],
+          );
+        },
+      );
+    } else if (responseBody.containsKey('msg') != true){
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: Text("Ops, algo deu errado!"),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
@@ -94,4 +123,5 @@ Future<void> changeDataAuth(context, String token, String newAddress, String new
     }
   }
 }
+
   
