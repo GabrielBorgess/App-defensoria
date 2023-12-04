@@ -29,25 +29,30 @@ if (response.statusCode == 201) {
       List<String> peticaoTipoList = [];
       List<String> peticaoDataList = [];
       List<String> peticaoStatusList = [];
-
-
-
+      List<String> peticaoObsList = [];
+      SharedPreferences prefs = await SharedPreferences.getInstance();
       for (var peticao in dadosPeticao) {
         String peticaoTipo = peticao['Tipo'];
         String peticaoData = peticao['DataPeticao'];
         int peticaoStatus = peticao['Status'];
 
+        if (peticao['Observacao'] != null) {
+          String peticaoObs = peticao['Observacao'];
+          peticaoObsList.add(peticaoObs);
+          print(peticaoObs);
+          await prefs.setStringList('Observacao', peticaoObsList);
+        }
         print(peticaoTipo);
-
         peticaoTipoList.add(peticaoTipo);
         peticaoDataList.add(peticaoData);
         peticaoStatusList.add(peticaoStatus.toString());
       }
 
-      SharedPreferences prefs = await SharedPreferences.getInstance();
+
       await prefs.setStringList('Tipo', peticaoTipoList);
       await prefs.setStringList('DataPeticao', peticaoDataList);
       await prefs.setStringList('Status', peticaoStatusList);
+
     }
   }
       

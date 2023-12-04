@@ -159,6 +159,7 @@ class SolicitationsPage extends StatelessWidget {
   }
 
 Future<List<PeticaoData>> getPeticoes() async {
+
   SharedPreferences prefs = await SharedPreferences.getInstance();
   final List<String> peticaoStatusList = prefs.getStringList('Status') ?? [];
   final List<String> peticaoTipoList = prefs.getStringList('Tipo') ?? [];

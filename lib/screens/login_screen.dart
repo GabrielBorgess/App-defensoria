@@ -1,6 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:defensoria/widgets/privacy_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import '../widgets/header_home.dart';
 import '../services/login.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +19,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _cpfController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
 
-  void clickPostButton(BuildContext context) async { 
+  void clickPostButton(BuildContext context) async {
+
     final String cpf = _cpfController.text.trim();
     final String senha = _senhaController.text.trim();
     final String cpfNovo = maskCpf(cpf);

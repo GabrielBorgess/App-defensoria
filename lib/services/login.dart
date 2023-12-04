@@ -6,6 +6,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 
 Future<String> login(context, String cpf, String senha) async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.clear();
   showDialog(
     context: context,
     builder: (BuildContext context) {

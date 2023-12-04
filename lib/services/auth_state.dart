@@ -7,6 +7,7 @@ class AuthState extends ChangeNotifier {
   String peticaoData;
   String peticaoStatus;
   String peticaoTipo;
+  String peticaoObs;
   String logradouro;
   String complemento;
   String bairro;
@@ -18,6 +19,7 @@ class AuthState extends ChangeNotifier {
         peticaoData = "",
         peticaoStatus = "",
         peticaoTipo = "",
+        peticaoObs = "",
         logradouro = "",
         complemento = "",
         bairro = "";
