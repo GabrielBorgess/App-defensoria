@@ -39,20 +39,21 @@ if (response.statusCode == 201) {
         if (peticao['Observacao'] != null) {
           String peticaoObs = peticao['Observacao'];
           peticaoObsList.add(peticaoObs);
-          print(peticaoObs);
-          await prefs.setStringList('Observacao', peticaoObsList);
-        }
+          } else {
+            String peticaoObs = 'Não possui observações';
+            peticaoObsList.add(peticaoObs);
+          }
+
         print(peticaoTipo);
         peticaoTipoList.add(peticaoTipo);
         peticaoDataList.add(peticaoData);
         peticaoStatusList.add(peticaoStatus.toString());
       }
 
-
       await prefs.setStringList('Tipo', peticaoTipoList);
       await prefs.setStringList('DataPeticao', peticaoDataList);
       await prefs.setStringList('Status', peticaoStatusList);
-
+      await prefs.setStringList('Observacao', peticaoObsList);
     }
   }
       

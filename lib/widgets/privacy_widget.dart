@@ -1,4 +1,6 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 Widget dialogBox(context) {
     return SizedBox(
@@ -32,7 +34,7 @@ Widget dialogBox(context) {
                       ),
                       child: Text(
                         "Termos de Serviços\n & \nPolítica de Privacidade",
-                        overflow: TextOverflow.visible,
+
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.black,
@@ -45,14 +47,21 @@ Widget dialogBox(context) {
                       padding: EdgeInsets.only(
                         top: 10,
                       ),
-                      child: Text(
-                        """====================
-
-Última Atualização: 22 de Novembro, 2023
-
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top:8.0, bottom: 8),
+                            child: RichText(text: TextSpan(children: [
+                              TextSpan(text: 'Link para os termos de serviços e a política de privacidade', style: TextStyle(color: Colors.black87), recognizer: TapGestureRecognizer()..onTap = (() {
+                                launchUrl(Uri.parse('https://www.defensoria.df.gov.br/?page_id=59345'));
+                              })
+                                                )])),
+                          ),
+                          Text(
+                            """=================================
+Última Atualização: 05 de Dezembro, 2023
 Por favor, leia os termos e as condições com atenção antes de usar nosso serviço.
-
-Aviso de privacidade e proteção de dados pessoais
+Aviso de privacidade e proteção de dados pessoais.
 A Defensoria Pública do Distrito Federal - DPDF, em observância à Lei nº 13.709, de 14 de agosto de 2018 (Lei Geral de Proteção de Dados Pessoais – LGPD), e ao Decreto nº 42.036/2021, de 27 de abril de 2021, instituiu o Aviso de Privacidade e de Proteção de Dados Pessoais, instrumento basilar para a implementação do Programa de Privacidade e Proteção de Dados Pessoais desta DPDF a ser elaborado em consonância com a missão, a visão e os valores institucionais. O Aviso e as ações previstas no supracitado Programa fundamentam-se no art. 5º da LGPD, bem como nos conceitos e regramentos previstos nas normas voltadas à segurança da informação, à governança, à gestão de riscos e à gestão documental, entre outras afins.
 
     • Princípios
@@ -104,13 +113,15 @@ A revisão deste Aviso de Privacidade e de Proteção de Dados Pessoais deve ser
     • Utilização de cookies
 Os cookies utilizados sítio eletrônico e nos aplicativos em uso pela DPDF são cookies estritamente necessários, como os de funcionalidade e segurança.
 """,
-                        textAlign: TextAlign.justify,
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          height: 1.5,
-                        ),
+                            textAlign: TextAlign.justify,
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              height: 1.5,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],

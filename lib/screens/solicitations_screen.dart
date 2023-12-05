@@ -6,43 +6,45 @@ class PeticaoData {
   final String status;
   final String tipo;
   final String data;
+  final String obs;
 
-  PeticaoData({required this.status, required this.tipo, required this.data});
+  PeticaoData({required this.status, required this.tipo, required this.data, required this.obs});
 }
 class SolicitationsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 55, bottom: 45),
-              child: HeaderHome(),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 31,
-                right: 31,
+      body: SizedBox(
+        width: MediaQuery.of(context).size.height * 2,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 55, bottom: 45),
+                child: HeaderHome(),
               ),
-              child: Column(
-                children: [
-                  Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 44),
-                        child: Text(
-                          "Minhas Solicitações",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: MediaQuery.of(context).size.height * 0.03,
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 31,
+                  right: 31,
+                ),
+                child: Column(
+                  children: [
+                    Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 44),
+                          child: Text(
+                            "Minhas Solicitações",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: MediaQuery.of(context).size.height * 0.03,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  Center(
-                    child: FutureBuilder<List<PeticaoData>?>(
+                      ],
+                    ),
+                    FutureBuilder<List<PeticaoData>?>(
                     future: getPeticoes(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -54,13 +56,12 @@ class SolicitationsPage extends StatelessWidget {
                       } else {
                         List<PeticaoData> peticoes = snapshot.data!;
                           return Column(
-                            children: peticoes.asMap().entries.map((entry) {
-                              PeticaoData peticao = entry.value;
-                              String peticaoStatus = peticao.status;
+                             children: peticoes.map((peticao) {
+          String peticaoStatus = peticao.status;
                               return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Padding(
                                         padding: const EdgeInsets.only(top: 0),
@@ -76,61 +77,67 @@ class SolicitationsPage extends StatelessWidget {
                                               ),
                                             ),
                                             Padding(
-                                            padding: const EdgeInsets.only(top: 5),
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(top: 8.0),
-                                              child: Row(
-                                                crossAxisAlignment: CrossAxisAlignment.center,          
+                                              padding: const EdgeInsets.only(top: 10),
+                                              child: Column(
                                                 children: [
-                          Text(
-                            peticao.data,
-                            style: TextStyle(
-                              color: Colors.black54,
-                              fontWeight: FontWeight.w400,
-                              fontSize: MediaQuery.of(context).size.height * 0.018,
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(left: MediaQuery.of(context).size.height * 0.15),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: (peticaoStatus == '0'
-                                                ? Colors.yellow[800]
-                                                : peticaoStatus == '1'
-                            ? Colors.green[800]
-                            : Colors.red[800]),
-                                borderRadius: BorderRadius.all(Radius.circular(8)),
-                              ),
-                              width: MediaQuery.of(context).size.width * 0.2,
-                              height: MediaQuery.of(context).size.height * 0.03,
-                              child: Center(
-                                child: Text(
-                                  peticaoStatus == '0' ? 'em Análise' : (peticaoStatus == '1' ? 'Aceito' : 'Rejeitado'),
-                                  style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: MediaQuery.of(context).size.height * 0.017,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
+                                                  SizedBox(
+                                                    width: MediaQuery.of(context).size.height * 0.35,
+                                                    child: RichText(
+                                                              text: TextSpan(
+                                                                text: 'Observação: ${peticao.obs}',
+                                                                style: TextStyle(
+                                                                  color: Colors.black54,
+                                                                  fontWeight: FontWeight.w400,
+                                                                  fontSize: MediaQuery.of(context).size.height * 0.018,
+                                                        ),
+                                                      ),
+                                                    softWrap: true,
+                                                    ),
+                                                  ),
                                                 ],
                                               ),
                                             ),
+                                            Padding(
+                                            padding: const EdgeInsets.only(top: 5),
+                                            child: Text(
+                                              peticao.data,
+                                              style: TextStyle(
+                                                color: Colors.black54,
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: MediaQuery.of(context).size.height * 0.018,
+                                              ),
                                             ),
-                                            
+                                            ),
                                           ],
                                         ),
                                       ),
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          
-                                        ],
-                                      ),
                                     ],
                                   ),
+                                   Padding(
+                                     padding: const EdgeInsets.only(top:8.0),
+                                     child: Container(
+                                                     decoration: BoxDecoration(
+                                                       color: (peticaoStatus == '0'
+                                                                       ? Colors.yellow[800]
+                                                                       : peticaoStatus == '1'
+                                                   ? Colors.green[800]
+                                                   : Colors.red[800]),
+                                                       borderRadius: BorderRadius.all(Radius.circular(8)),
+                                                     ),
+                                                     width: MediaQuery.of(context).size.width * 0.2,
+                                                     height: MediaQuery.of(context).size.height * 0.03,
+                                                     child: Center(
+                                                       child: Text(
+                                                         peticaoStatus == '0' ? 'em Análise' : (peticaoStatus == '1' ? 'Aceito' : 'Rejeitado'),
+                                                         style: TextStyle(
+                                                                   color: Colors.white,
+                                                                   fontWeight: FontWeight.w400,
+                                                                   fontSize: MediaQuery.of(context).size.height * 0.017,
+                                                         ),
+                                                       ),
+                                                     ),
+                                                   ),
+                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(top: 12, bottom: 20),
                                     child: SizedBox(
@@ -140,7 +147,7 @@ class SolicitationsPage extends StatelessWidget {
                                         decoration: BoxDecoration(color: Colors.black12),
                                       ),
                                     ),
-                                  ),
+                                  ), 
                                 ],
                               );
                             }).toList(),
@@ -148,11 +155,11 @@ class SolicitationsPage extends StatelessWidget {
                         }
                       },
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -164,6 +171,7 @@ Future<List<PeticaoData>> getPeticoes() async {
   final List<String> peticaoStatusList = prefs.getStringList('Status') ?? [];
   final List<String> peticaoTipoList = prefs.getStringList('Tipo') ?? [];
   final List<String> peticaoDataList = prefs.getStringList('DataPeticao') ?? [];
+  final List<String> peticaoObsList = prefs.getStringList('Observacao') ?? [];
 
   List<PeticaoData> peticoes = [];
 
@@ -172,6 +180,7 @@ Future<List<PeticaoData>> getPeticoes() async {
       status: peticaoStatusList[i],
       tipo: peticaoTipoList[i],
       data: peticaoDataList[i],
+      obs: peticaoObsList[i],
     );
     peticoes.insert(0,peticao);
   }
