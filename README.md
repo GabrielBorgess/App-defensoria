@@ -12,10 +12,12 @@
     * Siga as instruções de instalação para o seu sistema operacional (Windows, macOS ou Linux).
 
 ### 2. Instale as dependências:
-    * Navegue até o diretório do seu projeto clonado e execute 'flutter pub get' para instalar as dependências do projeto.
+    * Navegue até o diretório do seu projeto clonado e execute 'flutter pub get' para instalar 
+    as dependências do projeto.
 
 ### 3. Verifique seu ambiente:
-    * Execute 'flutter doctor' para verificar se há problemas no seu ambiente e para instalar quaisquer dependências ausentes.
+    * Execute 'flutter doctor' para verificar se há problemas no seu ambiente e para instalar 
+    quaisquer dependências ausentes.
 
 ### 4. Baixar e configurar Android Studio:
     * Baixe android studio no site oficial e configure ele para seu sistema operacional.
